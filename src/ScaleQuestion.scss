@@ -1,0 +1,89 @@
+@import "assets/variables";
+
+.scaleQuestion {
+    font: $font;
+
+    &__notes {
+        display: flex;
+    }
+
+    &__note {
+        display: flex;
+        margin: 1em;
+    }
+
+    &__pitch {
+        input {
+            font-size: 60px;
+            width: 1em;
+            text-align: center;
+        }
+    }
+
+    &__accidentals {
+        display: flex;
+        flex-direction: column;
+        margin-left: 0.5em;
+    }
+
+    &__accidental {
+        flex: 1;
+        display: flex;
+
+        label {
+            display: inline-flex;
+            align-items: center;
+        }
+    }
+
+    &__hint, &__solution {
+        padding: 1em;
+        margin-bottom: 1em;
+
+        h1 {
+            font-size: $font-size;
+            font-weight: bold;
+            padding: 0;
+            margin-bottom: 0.5em;
+        }
+
+        p:last-child {
+            margin-bottom: 0;
+        }
+    }
+
+    &__hint {
+        background-color: $hint-background-color;
+    }
+
+    &__solution {
+        &--correct {
+            background-color: $solution-background-color-correct;
+            color: $solution-color-correct;
+        }
+
+        &--wrong {
+            background-color: $solution-background-color-wrong;
+            color: $solution-color-wrong;
+        }
+    }
+
+    button {
+        font: $font;
+        background-color: $button-background-color;
+        border: 0;
+        padding: 1em;
+        margin: 1em;
+        color: white;
+        font-weight: bold;
+
+        &:hover {
+            background-color: $button-background-color-hover;
+            outline: 0;
+        }
+
+        &:disabled {
+            background-color: $button-background-color-disabled;
+        }
+    }
+}

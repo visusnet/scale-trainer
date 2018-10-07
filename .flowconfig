@@ -1,0 +1,12 @@
+[ignore]
+.*/node_modules/.*
+
+[include]
+
+[libs]
+
+[lints]
+
+[options]
+module.file_ext=.scss
+module.name_mapper.extension='scss' -> 'empty/object'
