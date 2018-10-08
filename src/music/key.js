@@ -1,5 +1,8 @@
 import type {Note} from './note';
-import {noteToString} from './note';
+import {
+    normalizeAccidentals,
+    noteToString
+} from './note';
 import type {Interval} from './interval';
 import {
     addInterval,
@@ -112,12 +115,7 @@ export const MELODIC_MINOR_SCALE = {
 };
 export const CHURCH_SCALES: Scale[] = [
     {name: 'major', construction: MAJOR_CONSTRUCTION, modes: CHURCH_MODES},
-    {name: 'minor', construction: MINOR_CONSTRUCTION, modes: CHURCH_MODES},
-];
-export const ALL_SCALES: Scale[] = [
-    CHURCH_SCALES,
-    HARMONIC_MINOR_SCALE,
-    MELODIC_MINOR_SCALE
+    {name: 'minor', construction: MINOR_CONSTRUCTION, modes: CHURCH_MODES}
 ];
 
 export function modeToString(mode: Mode, scale: Scale): string {
@@ -138,10 +136,11 @@ export function applyModeToConstruction(scale: Scale, mode: Mode): ScaleConstruc
 }
 
 export function keyToNotes(key: Key): Note[] {
-    return applyModeToConstruction(key.scale, key.mode).reduce((notes: Note[], interval: Interval) => {
+    return [...applyModeToConstruction(key.scale, key.mode).slice(0, -1).reduce((notes: Note[], interval: Interval) => {
         const previousNote = notes[notes.length - 1];
-        return [...notes, addInterval(previousNote, interval)];
-    }, [key.root]);
+        const currentNote = addInterval(previousNote, interval);
+        return [...notes, normalizeAccidentals(currentNote, key.root.accidental)];
+    }, [key.root]), key.root];
 }
 
 function _rotateArray<T>(array: T[], rotateByOffset: number) {

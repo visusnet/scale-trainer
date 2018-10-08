@@ -17,6 +17,12 @@
             font-size: 60px;
             width: 1em;
             text-align: center;
+            border: 1px solid grayscale($color-light-blue);
+            outline: 0;
+
+            &:focus {
+                border-color: $button-background-color-hover;
+            }
         }
     }
 
@@ -76,10 +82,25 @@
         margin: 1em;
         color: white;
         font-weight: bold;
+        transition: all 0.2s;
+        -webkit-transition: all 0.2s;
+
+        &:hover, &:active, &:focus {
+            outline: 0;
+        }
 
         &:hover {
             background-color: $button-background-color-hover;
-            outline: 0;
+
+            &:not(:disabled) {
+                padding: 0.8em 1em;
+                margin: 1.1em 1em;
+            }
+        }
+
+        &:active {
+            transition-duration: 0s;
+            background-color: $button-background-color-active;
         }
 
         &:disabled {

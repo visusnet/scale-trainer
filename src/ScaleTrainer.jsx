@@ -4,6 +4,7 @@ import ScaleQuestion from './ScaleQuestion';
 import {getRandomQuestion} from './music/random';
 import type {Question} from './music/question';
 import './ScaleTrainer.scss';
+import {keyToString} from './music/key';
 
 type State = {
     question: ?Question,
@@ -71,9 +72,14 @@ export default class ScaleTrainer extends Component<void, State> {
             <>
                 {this.renderOptions()}
                 {question && question.type === 'scale'
-                    ? <ScaleQuestion question={question} onNextClick={this._handleNextClick}/>
+                    ? <ScaleQuestion key={_questionToString(question)} question={question}
+                        onNextClick={this._handleNextClick}/>
                     : <div>Loading...</div>}
             </>
         );
     }
+}
+
+function _questionToString(question: Question): string {
+    return `${question.type}${keyToString(question.key)}`;
 }

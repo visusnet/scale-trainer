@@ -19,6 +19,10 @@ import {
     PITCHES
 } from './music/note';
 import './ScaleQuestion.scss';
+import {
+    AUGMENTED_DIMINISHED_INTERVALS,
+    relativeIntervalsToRootIntervals
+} from './music/interval';
 
 type Props = {
     question: ScaleQuestion,
@@ -30,7 +34,8 @@ type State = {
     accidentals: {[number]: Accidental},
     isAnswered: boolean,
     isCorrect: boolean,
-    showHint: boolean
+    showHint: boolean,
+    hintIndex: number
 }
 
 export default class ScaleQuestionComponent extends Component<Props, State> {
@@ -149,10 +154,16 @@ export default class ScaleQuestionComponent extends Component<Props, State> {
     }
 
     renderHint(key: Key) {
+        const scaleConstruction = applyModeToConstruction(key.scale, key.mode);
+        const hints = [
+            relativeIntervalsToRootIntervals(key.root, scaleConstruction).join(' '),
+            relativeIntervalsToRootIntervals(key.root, scaleConstruction, AUGMENTED_DIMINISHED_INTERVALS).join(' '),
+            scaleConstruction.join('-')
+        ];
         return (
             <div className="scaleQuestion__hint">
                 <h1>Hint</h1>
-                <p>{applyModeToConstruction(key.scale, key.mode).join('-')}</p>
+                <p>{hints[this.state.hintIndex]}</p>
             </div>
         );
     }
@@ -251,10 +262,19 @@ function _setAnswered() {
 function _showHint() {
     return (state: State) => ({
         ...state,
-        showHint: true
+        showHint: true,
+        hintIndex: _getRandomInt(0, 2, state.hintIndex)
     });
 }
 
 function _range(length: number): number[] {
     return Array.from(Array(length).keys());
+}
+
+function _getRandomInt(min: number, max: number, exclude: number = min - 1): number {
+    const randomInt = Math.floor(Math.random() * (max - min + 1)) + min;
+    if (randomInt === exclude) {
+        return _getRandomInt(min, max, exclude);
+    }
+    return randomInt;
 }

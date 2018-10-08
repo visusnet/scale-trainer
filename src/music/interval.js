@@ -5,6 +5,7 @@ import {
     note,
     SHARP_ACCIDENTAL
 } from './note';
+import type {Key} from './key';
 
 export type MajorMinorPerfectInterval =
     'P1' // perfect unison
@@ -48,6 +49,38 @@ export type AlternativeInterval =
 export type StepInterval = 'H' | 'W';
 
 export type Interval = MajorMinorPerfectInterval | AugmentedDiminishedInterval | AlternativeInterval | StepInterval;
+
+export const MAJOR_MINOR_PERFECT_INTERVALS: MajorMinorPerfectInterval[] = [
+    'P1',
+    'm2',
+    'M2',
+    'm3',
+    'M3',
+    'P4',
+    'P5',
+    'm6',
+    'M6',
+    'm7',
+    'M7',
+    'P8'
+];
+
+export const AUGMENTED_DIMINISHED_INTERVALS: AugmentedDiminishedInterval[] = [
+    'd2',
+    'A1',
+    'd3',
+    'A2',
+    'd4',
+    'A3',
+    'd5',
+    'A4',
+    'd6',
+    'A5',
+    'd7',
+    'A6',
+    'd8',
+    'A7'
+];
 
 export const SEMITONE: AlternativeInterval = 'semitone';
 export const WHOLE_TONE: AlternativeInterval = 'whole tone';
@@ -107,46 +140,48 @@ export const INTERVAL_SEMITONE_MAP: {[Interval]: number} = {
     'A7': 12
 };
 
-export function addInterval(n: Note, interval: Interval): Note {
-    const NEXT_SEMITONE_MAP = {
-        'A': {
-            [FLAT_ACCIDENTAL]: note('A'),
-            [NATURAL_ACCIDENTAL]: note('A', SHARP_ACCIDENTAL),
-            [SHARP_ACCIDENTAL]: note('B')
-        },
-        'B': {
-            [FLAT_ACCIDENTAL]: note('B'),
-            [NATURAL_ACCIDENTAL]: note('C'),
-            [SHARP_ACCIDENTAL]: note('C', SHARP_ACCIDENTAL)
-        },
-        'C': {
-            [FLAT_ACCIDENTAL]: note('C'),
-            [NATURAL_ACCIDENTAL]: note('C', SHARP_ACCIDENTAL),
-            [SHARP_ACCIDENTAL]: note('D')
-        },
-        'D': {
-            [FLAT_ACCIDENTAL]: note('D'),
-            [NATURAL_ACCIDENTAL]: note('D', SHARP_ACCIDENTAL),
-            [SHARP_ACCIDENTAL]: note('E')
-        },
-        'E': {
-            [FLAT_ACCIDENTAL]: note('E'),
-            [NATURAL_ACCIDENTAL]: note('F'),
-            [SHARP_ACCIDENTAL]: note('F', SHARP_ACCIDENTAL)
-        },
-        'F': {
-            [FLAT_ACCIDENTAL]: note('F'),
-            [NATURAL_ACCIDENTAL]: note('F', SHARP_ACCIDENTAL),
-            [SHARP_ACCIDENTAL]: note('G')
-        },
-        'G': {
-            [FLAT_ACCIDENTAL]: note('G'),
-            [NATURAL_ACCIDENTAL]: note('G', SHARP_ACCIDENTAL),
-            [SHARP_ACCIDENTAL]: note('A')
-        }
-    };
+const NEXT_SEMITONE_MAP = {
+    'A': {
+        [FLAT_ACCIDENTAL]: note('A'),
+        [NATURAL_ACCIDENTAL]: note('A', SHARP_ACCIDENTAL),
+        [SHARP_ACCIDENTAL]: note('B')
+    },
+    'B': {
+        [FLAT_ACCIDENTAL]: note('B'),
+        [NATURAL_ACCIDENTAL]: note('C'),
+        [SHARP_ACCIDENTAL]: note('C', SHARP_ACCIDENTAL)
+    },
+    'C': {
+        [FLAT_ACCIDENTAL]: note('C'),
+        [NATURAL_ACCIDENTAL]: note('C', SHARP_ACCIDENTAL),
+        [SHARP_ACCIDENTAL]: note('D')
+    },
+    'D': {
+        [FLAT_ACCIDENTAL]: note('D'),
+        [NATURAL_ACCIDENTAL]: note('D', SHARP_ACCIDENTAL),
+        [SHARP_ACCIDENTAL]: note('E')
+    },
+    'E': {
+        [FLAT_ACCIDENTAL]: note('E'),
+        [NATURAL_ACCIDENTAL]: note('F'),
+        [SHARP_ACCIDENTAL]: note('F', SHARP_ACCIDENTAL)
+    },
+    'F': {
+        [FLAT_ACCIDENTAL]: note('F'),
+        [NATURAL_ACCIDENTAL]: note('F', SHARP_ACCIDENTAL),
+        [SHARP_ACCIDENTAL]: note('G')
+    },
+    'G': {
+        [FLAT_ACCIDENTAL]: note('G'),
+        [NATURAL_ACCIDENTAL]: note('G', SHARP_ACCIDENTAL),
+        [SHARP_ACCIDENTAL]: note('A')
+    }
+};
 
-    const numberOfSemitones = INTERVAL_SEMITONE_MAP[interval];
+export function addInterval(n: Note, interval: Interval | number): Note {
+    const numberOfSemitones = typeof interval === 'number'
+        ? interval
+        : INTERVAL_SEMITONE_MAP[interval];
 
     let augmentedNote = n;
     for (let augmentedSemitones = 0; augmentedSemitones < numberOfSemitones; augmentedSemitones++) {
@@ -154,4 +189,14 @@ export function addInterval(n: Note, interval: Interval): Note {
     }
 
     return augmentedNote;
+}
+
+export function relativeIntervalsToRootIntervals(root: Key,
+    relativeIntervals: Interval[],
+    intervalNames: Interval[] = MAJOR_MINOR_PERFECT_INTERVALS): Interval[] {
+    let semitonesToRoot = -1;
+    return relativeIntervals.reduce((intervals: Interval[], relativeInterval: Interval) => {
+        semitonesToRoot += INTERVAL_SEMITONE_MAP[relativeInterval];
+        return [...intervals, intervalNames[semitonesToRoot]];
+    }, []);
 }
