@@ -1,6 +1,6 @@
 // @flow
 import React, {Component} from 'react';
-import ScaleQuestion from './ScaleQuestion';
+import ScaleQuestion from './components/ScaleQuestion/ScaleQuestion';
 import {getRandomQuestion} from './music/random';
 import type {Question} from './music/question';
 import './ScaleTrainer.scss';
@@ -46,18 +46,31 @@ export default class ScaleTrainer extends Component<void, State> {
         return (
             <div className="scaleTrainer__options">
                 <label htmlFor="includeModes">
-                    <input type="checkbox" name="includeModes" value="includeModes" checked={this.state.includeModes}
+                    <input
+                        type="checkbox"
+                        id="includeModes"
+                        name="includeModes"
+                        value="includeModes"
+                        checked={this.state.includeModes}
                         onChange={this._handleOptionChange}/>
                     Modes
                 </label>
                 <label htmlFor="includeHarmonicMinor">
-                    <input type="checkbox" name="includeHarmonicMinor" value="includeHarmonicMinor"
+                    <input
+                        type="checkbox"
+                        id="includeHarmonicMinor"
+                        name="includeHarmonicMinor"
+                        value="includeHarmonicMinor"
                         checked={this.state.includeHarmonicMinor}
                         onChange={this._handleOptionChange}/>
                     Harmonic Minor
                 </label>
                 <label htmlFor="includeMelodicMinor">
-                    <input type="checkbox" name="includeMelodicMinor" value="includeMelodicMinor"
+                    <input
+                        type="checkbox"
+                        id="includeMelodicMinor"
+                        name="includeMelodicMinor"
+                        value="includeMelodicMinor"
                         checked={this.state.includeMelodicMinor}
                         onChange={this._handleOptionChange}/>
                     Melodic Minor
