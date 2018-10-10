@@ -16,9 +16,9 @@ type State = {
 export default class ScaleTrainer extends Component<void, State> {
     state = {
         question: undefined,
-        includeModes: true,
-        includeHarmonicMinor: true,
-        includeMelodicMinor: true
+        includeModes: _getBooleanFromLocalStorage('includeModes'),
+        includeHarmonicMinor: _getBooleanFromLocalStorage('includeHarmonicMinor'),
+        includeMelodicMinor: _getBooleanFromLocalStorage('includeMelodicMinor')
     };
 
     componentWillMount() {
@@ -31,9 +31,11 @@ export default class ScaleTrainer extends Component<void, State> {
 
     _handleOptionChange = (e: any) => {
         const option = e.target.value;
+        const value = !this.state[option];
         this.setState({
-            [option]: !this.state[option]
+            [option]: value
         }, this._updateQuestion);
+        localStorage.setItem(option, value);
     };
 
     _updateQuestion = () => {
@@ -95,4 +97,12 @@ export default class ScaleTrainer extends Component<void, State> {
 
 function _questionToString(question: Question): string {
     return `${question.type}${keyToString(question.key)}`;
+}
+
+function _getBooleanFromLocalStorage(key: string, defaultValue = true): boolean {
+    const value = localStorage.getItem(key);
+    if (typeof value === 'undefined') {
+        return defaultValue;
+    }
+    return value === 'true';
 }

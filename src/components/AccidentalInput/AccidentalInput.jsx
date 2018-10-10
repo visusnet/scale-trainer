@@ -22,6 +22,7 @@ export default function AccidentalInput(props: Props) {
                 htmlFor={accidentalKey}>
                 <input
                     type="radio"
+                    id={accidentalKey}
                     name={accidentalKey}
                     value={accidental}
                     checked={isCurrentAccidental}
