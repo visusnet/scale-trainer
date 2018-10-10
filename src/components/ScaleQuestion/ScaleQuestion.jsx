@@ -7,7 +7,7 @@ import {
     keyToNotes,
     keyToString
 } from '../../music/key';
-import type {Note} from '../../music/note';
+import {Note} from '../../music/note';
 import {
     ACCIDENTALS,
     areNoteArraysEqual,

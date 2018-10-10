@@ -1,9 +1,15 @@
 // @flow
 export type Pitch = 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G';
 export type Accidental = '♯' | '♭' | '♮';
-export type Note = {
-    pitch: Pitch,
-    accidental: Accidental
+
+export class Note {
+    pitch: Pitch;
+    accidental: Accidental;
+
+    constructor(pitch: Pitch, accidental: Accidental) {
+        this.pitch = pitch;
+        this.accidental = accidental;
+    }
 }
 
 export const PITCHES: Pitch[] = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
@@ -20,11 +26,8 @@ export function noteToString(note: Note): string {
     return note.pitch + accidentalToString(note.accidental);
 }
 
-export function note(pitch: Pitch, accidental: ?Accidental): Note {
-    return {
-        pitch,
-        accidental: accidental ? accidental : NATURAL_ACCIDENTAL
-    };
+export function createNote(pitch: Pitch, accidental: ?Accidental): Note {
+    return new Note(pitch, accidental ? accidental : NATURAL_ACCIDENTAL);
 }
 
 export function arePitchesEqual(note1: Note, note2: Note): boolean {
@@ -48,30 +51,30 @@ export function nextPitch(pitch: Pitch): Pitch {
 export function normalizeAccidentals(note: Note, preferredAccidental: Accidental = SHARP_ACCIDENTAL): Note {
     if (preferredAccidental === FLAT_ACCIDENTAL) {
         if (note.accidental === SHARP_ACCIDENTAL) {
-            return {
-                pitch: nextPitch(note.pitch),
-                accidental: note.pitch === 'B' || note.pitch === 'E' ? NATURAL_ACCIDENTAL : FLAT_ACCIDENTAL
-            };
+            return createNote(
+                nextPitch(note.pitch),
+                note.pitch === 'B' || note.pitch === 'E' ? NATURAL_ACCIDENTAL : FLAT_ACCIDENTAL
+            );
         } else if (note.accidental === FLAT_ACCIDENTAL) {
             if (note.pitch === 'C' || note.pitch === 'F') {
-                return {
-                    pitch: previousPitch(note.pitch),
-                    accidental: NATURAL_ACCIDENTAL
-                };
+                return createNote(
+                    previousPitch(note.pitch),
+                    NATURAL_ACCIDENTAL
+                );
             }
         }
     } else {
         if (note.accidental === FLAT_ACCIDENTAL) {
-            return {
-                pitch: previousPitch(note.pitch),
-                accidental: note.pitch === 'C' || note.pitch === 'F' ? NATURAL_ACCIDENTAL : SHARP_ACCIDENTAL
-            };
+            return createNote(
+                previousPitch(note.pitch),
+                note.pitch === 'C' || note.pitch === 'F' ? NATURAL_ACCIDENTAL : SHARP_ACCIDENTAL
+            );
         } else if (note.accidental === SHARP_ACCIDENTAL) {
             if (note.pitch === 'B' || note.pitch === 'E') {
-                return {
-                    pitch: nextPitch(note.pitch),
-                    accidental: NATURAL_ACCIDENTAL
-                };
+                return createNote(
+                    nextPitch(note.pitch),
+                    NATURAL_ACCIDENTAL
+                );
             }
         }
     }

@@ -1,6 +1,6 @@
-import type {Note} from './note';
 import {
     normalizeAccidentals,
+    Note,
     noteToString
 } from './note';
 import type {Interval} from './interval';

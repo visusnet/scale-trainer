@@ -1,10 +1,10 @@
 import type {Question} from './question';
-import type {Note} from './note';
 import {
     ACCIDENTALS,
     areNotesEqual,
+    createNote,
     FLAT_ACCIDENTAL,
-    note,
+    Note,
     PITCHES,
     SHARP_ACCIDENTAL
 } from './note';
@@ -20,10 +20,10 @@ import {
 } from './key';
 
 export const IGNORED_NOTES: Note = [
-    note('B', SHARP_ACCIDENTAL),
-    note('C', FLAT_ACCIDENTAL),
-    note('E', SHARP_ACCIDENTAL),
-    note('F', FLAT_ACCIDENTAL)
+    createNote('B', SHARP_ACCIDENTAL),
+    createNote('C', FLAT_ACCIDENTAL),
+    createNote('E', SHARP_ACCIDENTAL),
+    createNote('F', FLAT_ACCIDENTAL)
 ];
 
 export function getRandomKey(includeModes: boolean, includeHarmonicMinor: boolean, includeMelodicMinor: boolean): Key {

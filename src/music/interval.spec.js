@@ -1,6 +1,6 @@
 import {
     FLAT_ACCIDENTAL,
-    note,
+    createNote,
     SHARP_ACCIDENTAL
 } from './note';
 import {
@@ -10,33 +10,33 @@ import {
 } from './interval';
 
 describe('addInterval should', () => {
-    const A_FLAT = note('A', FLAT_ACCIDENTAL);
-    const A = note('A');
-    const A_SHARP = note('A', SHARP_ACCIDENTAL);
+    const A_FLAT = createNote('A', FLAT_ACCIDENTAL);
+    const A = createNote('A');
+    const A_SHARP = createNote('A', SHARP_ACCIDENTAL);
 
-    const B_FLAT = note('B', FLAT_ACCIDENTAL);
-    const B = note('B');
-    const B_SHARP = note('B', SHARP_ACCIDENTAL);
+    const B_FLAT = createNote('B', FLAT_ACCIDENTAL);
+    const B = createNote('B');
+    const B_SHARP = createNote('B', SHARP_ACCIDENTAL);
 
-    const C_FLAT = note('C', FLAT_ACCIDENTAL);
-    const C = note('C');
-    const C_SHARP = note('C', SHARP_ACCIDENTAL);
+    const C_FLAT = createNote('C', FLAT_ACCIDENTAL);
+    const C = createNote('C');
+    const C_SHARP = createNote('C', SHARP_ACCIDENTAL);
 
-    const D_FLAT = note('D', FLAT_ACCIDENTAL);
-    const D = note('D');
-    const D_SHARP = note('D', SHARP_ACCIDENTAL);
+    const D_FLAT = createNote('D', FLAT_ACCIDENTAL);
+    const D = createNote('D');
+    const D_SHARP = createNote('D', SHARP_ACCIDENTAL);
 
-    const E_FLAT = note('E', FLAT_ACCIDENTAL);
-    const E = note('E');
-    const E_SHARP = note('E', SHARP_ACCIDENTAL);
+    const E_FLAT = createNote('E', FLAT_ACCIDENTAL);
+    const E = createNote('E');
+    const E_SHARP = createNote('E', SHARP_ACCIDENTAL);
 
-    const F_FLAT = note('F', FLAT_ACCIDENTAL);
-    const F = note('F');
-    const F_SHARP = note('F', SHARP_ACCIDENTAL);
+    const F_FLAT = createNote('F', FLAT_ACCIDENTAL);
+    const F = createNote('F');
+    const F_SHARP = createNote('F', SHARP_ACCIDENTAL);
 
-    const G_FLAT = note('G', FLAT_ACCIDENTAL);
-    const G = note('G');
-    const G_SHARP = note('G', SHARP_ACCIDENTAL);
+    const G_FLAT = createNote('G', FLAT_ACCIDENTAL);
+    const G = createNote('G');
+    const G_SHARP = createNote('G', SHARP_ACCIDENTAL);
 
     describe('add a semitone', () => {
         it('to A flat', () => expect(addInterval(A_FLAT, SEMITONE)).toEqual(A));

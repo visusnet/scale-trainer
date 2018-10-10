@@ -1,8 +1,8 @@
-import type {Note} from './note';
 import {
+    createNote,
     FLAT_ACCIDENTAL,
     NATURAL_ACCIDENTAL,
-    note,
+    Note,
     SHARP_ACCIDENTAL
 } from './note';
 import type {Key} from './key';
@@ -142,39 +142,39 @@ export const INTERVAL_SEMITONE_MAP: {[Interval]: number} = {
 
 const NEXT_SEMITONE_MAP = {
     'A': {
-        [FLAT_ACCIDENTAL]: note('A'),
-        [NATURAL_ACCIDENTAL]: note('A', SHARP_ACCIDENTAL),
-        [SHARP_ACCIDENTAL]: note('B')
+        [FLAT_ACCIDENTAL]: createNote('A'),
+        [NATURAL_ACCIDENTAL]: createNote('A', SHARP_ACCIDENTAL),
+        [SHARP_ACCIDENTAL]: createNote('B')
     },
     'B': {
-        [FLAT_ACCIDENTAL]: note('B'),
-        [NATURAL_ACCIDENTAL]: note('C'),
-        [SHARP_ACCIDENTAL]: note('C', SHARP_ACCIDENTAL)
+        [FLAT_ACCIDENTAL]: createNote('B'),
+        [NATURAL_ACCIDENTAL]: createNote('C'),
+        [SHARP_ACCIDENTAL]: createNote('C', SHARP_ACCIDENTAL)
     },
     'C': {
-        [FLAT_ACCIDENTAL]: note('C'),
-        [NATURAL_ACCIDENTAL]: note('C', SHARP_ACCIDENTAL),
-        [SHARP_ACCIDENTAL]: note('D')
+        [FLAT_ACCIDENTAL]: createNote('C'),
+        [NATURAL_ACCIDENTAL]: createNote('C', SHARP_ACCIDENTAL),
+        [SHARP_ACCIDENTAL]: createNote('D')
     },
     'D': {
-        [FLAT_ACCIDENTAL]: note('D'),
-        [NATURAL_ACCIDENTAL]: note('D', SHARP_ACCIDENTAL),
-        [SHARP_ACCIDENTAL]: note('E')
+        [FLAT_ACCIDENTAL]: createNote('D'),
+        [NATURAL_ACCIDENTAL]: createNote('D', SHARP_ACCIDENTAL),
+        [SHARP_ACCIDENTAL]: createNote('E')
     },
     'E': {
-        [FLAT_ACCIDENTAL]: note('E'),
-        [NATURAL_ACCIDENTAL]: note('F'),
-        [SHARP_ACCIDENTAL]: note('F', SHARP_ACCIDENTAL)
+        [FLAT_ACCIDENTAL]: createNote('E'),
+        [NATURAL_ACCIDENTAL]: createNote('F'),
+        [SHARP_ACCIDENTAL]: createNote('F', SHARP_ACCIDENTAL)
     },
     'F': {
-        [FLAT_ACCIDENTAL]: note('F'),
-        [NATURAL_ACCIDENTAL]: note('F', SHARP_ACCIDENTAL),
-        [SHARP_ACCIDENTAL]: note('G')
+        [FLAT_ACCIDENTAL]: createNote('F'),
+        [NATURAL_ACCIDENTAL]: createNote('F', SHARP_ACCIDENTAL),
+        [SHARP_ACCIDENTAL]: createNote('G')
     },
     'G': {
-        [FLAT_ACCIDENTAL]: note('G'),
-        [NATURAL_ACCIDENTAL]: note('G', SHARP_ACCIDENTAL),
-        [SHARP_ACCIDENTAL]: note('A')
+        [FLAT_ACCIDENTAL]: createNote('G'),
+        [NATURAL_ACCIDENTAL]: createNote('G', SHARP_ACCIDENTAL),
+        [SHARP_ACCIDENTAL]: createNote('A')
     }
 };
 
