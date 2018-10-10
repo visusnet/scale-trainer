@@ -1,8 +1,4 @@
-import {
-    normalizeAccidentals,
-    Note,
-    noteToString
-} from './note';
+import {Note} from './note';
 import type {Interval} from './interval';
 import {
     addInterval,
@@ -128,7 +124,7 @@ export function scaleToString(scale: Scale): string {
 }
 
 export function keyToString(key: Key): string {
-    return `${noteToString(key.root)} ${scaleToString(key.scale)} ${modeToString(key.mode, key.scale)}`.trim();
+    return `${Note.noteToString(key.root)} ${scaleToString(key.scale)} ${modeToString(key.mode, key.scale)}`.trim();
 }
 
 export function applyModeToConstruction(scale: Scale, mode: Mode): ScaleConstruction {
@@ -139,7 +135,7 @@ export function keyToNotes(key: Key): Note[] {
     return [...applyModeToConstruction(key.scale, key.mode).slice(0, -1).reduce((notes: Note[], interval: Interval) => {
         const previousNote = notes[notes.length - 1];
         const currentNote = addInterval(previousNote, interval);
-        return [...notes, normalizeAccidentals(currentNote, key.root.accidental)];
+        return [...notes, currentNote.normalizeAccidentals(key.root.accidental)];
     }, [key.root]), key.root];
 }
 

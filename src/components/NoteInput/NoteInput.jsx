@@ -7,6 +7,7 @@ import type {
 } from '../../music/note';
 import {
     ACCIDENTALS,
+    createNote,
     PITCHES
 } from '../../music/note';
 import AccidentalInput from '../AccidentalInput/AccidentalInput';
@@ -55,10 +56,10 @@ export default function NoteInput(props: Props) {
 function _createHandlePitchChange(noteIndex: number, accidental: Accidental, onChange: NoteInputChangeHandler) {
     return (e: any) => {
         e.preventDefault();
-        const note = {
-            pitch: _toPitch(e.target.value.toUpperCase()),
+        const note = createNote(
+            _toPitch(e.target.value.toUpperCase()),
             accidental
-        };
+        );
         onChange(noteIndex, note);
     };
 }
@@ -68,10 +69,10 @@ function _createHandleAccidentalChange(noteIndex: number,
     accidental: Accidental,
     onChange: NoteInputChangeHandler) {
     return () => {
-        const note = {
+        const note = createNote(
             accidental,
             pitch
-        };
+        );
         onChange(noteIndex, note);
     };
 }

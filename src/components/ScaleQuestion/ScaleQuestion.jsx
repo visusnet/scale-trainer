@@ -139,7 +139,7 @@ export default class ScaleQuestionComponent extends Component<Props, State> {
                 {this.state.isCorrect
                     ? <p>Your solution is correct!</p>
                     : <p>Sorry, that's not correct.</p>}
-                <p>{notes.map(noteToString).join(', ')}</p>
+                <p>{notes.map(Note.noteToString).join(', ')}</p>
             </div>
         );
     }
@@ -191,7 +191,7 @@ function _setAnswered() {
         return {
             ...state,
             isAnswered: true,
-            isCorrect: areNoteArraysEqual(actualNotes, answeredNotes)
+            isCorrect: Note.areNoteArraysEqual(actualNotes, answeredNotes)
         };
     };
 }

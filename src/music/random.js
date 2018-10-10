@@ -1,7 +1,6 @@
 import type {Question} from './question';
 import {
     ACCIDENTALS,
-    areNotesEqual,
     createNote,
     FLAT_ACCIDENTAL,
     Note,
@@ -65,15 +64,15 @@ export function getRandomArrayElement<T>(array: T[]): T {
     return array[Math.floor(Math.random() * array.length)];
 }
 
-export function isIgnoredNote(n: Note): boolean {
-    return !IGNORED_NOTES.map((ignoredNote: Note) => areNotesEqual(ignoredNote, n)).some(comparison => !comparison);
+export function isIgnoredNote(note: Note): boolean {
+    return !IGNORED_NOTES.map((ignoredNote: Note) => ignoredNote.equals(note)).some(comparison => !comparison);
 }
 
 export function getRandomNote(): Note {
-    const note = {
-        pitch: getRandomArrayElement(PITCHES),
-        accidental: getRandomArrayElement(ACCIDENTALS)
-    };
+    const note = createNote(
+        getRandomArrayElement(PITCHES),
+        getRandomArrayElement(ACCIDENTALS)
+    );
     if (isIgnoredNote(note)) {
         return getRandomNote();
     }
