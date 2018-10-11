@@ -5,7 +5,7 @@ import {
     Note,
     SHARP_ACCIDENTAL
 } from './note';
-import type {Key} from './key';
+import {Key} from './key';
 
 export type MajorMinorPerfectInterval =
     'P1' // perfect unison

@@ -18,13 +18,15 @@ type Props = {
     isRoot: boolean,
     note: Note,
     noteIndex: number,
-    onChange: NoteInputChangeHandler
+    onChange: NoteInputChangeHandler,
+    showError: boolean
 };
 
 export default function NoteInput(props: Props) {
     const {isRoot, noteIndex, onChange, note} = props;
+    const className = `scaleQuestion__note${props.showError ? ' scaleQuestion__note--error' : ''}`;
     return (
-        <div className="scaleQuestion__note" key={`note-${noteIndex}`}>
+        <div className={className} key={`note-${noteIndex}`}>
             <div className="scaleQuestion__pitch">
                 <input
                     type="text"
@@ -70,8 +72,8 @@ function _createHandleAccidentalChange(noteIndex: number,
     onChange: NoteInputChangeHandler) {
     return () => {
         const note = createNote(
-            accidental,
-            pitch
+            pitch,
+            accidental
         );
         onChange(noteIndex, note);
     };

@@ -1,18 +1,11 @@
 // @flow
 import React, {Component} from 'react';
 import type {ScaleQuestion} from '../../music/question';
-import type {Key} from '../../music/key';
-import {
-    applyModeToConstruction,
-    keyToNotes,
-    keyToString
-} from '../../music/key';
-import {Note} from '../../music/note';
+import {Key} from '../../music/key';
 import {
     ACCIDENTALS,
-    areNoteArraysEqual,
     NATURAL_ACCIDENTAL,
-    noteToString,
+    Note,
     PITCHES
 } from '../../music/note';
 import './ScaleQuestion.scss';
@@ -29,8 +22,10 @@ type Props = {
 
 type State = {
     notes: {[number]: $Shape<Note>},
+    correctNotes: {[number]: boolean},
     isAnswered: boolean,
     isCorrect: boolean,
+    showErrors: boolean,
     showHint: boolean,
     hintIndex: number
 }
@@ -42,8 +37,10 @@ const DEFAULT_NOTE: $Shape<Note> = {
 export default class ScaleQuestionComponent extends Component<Props, State> {
     state = {
         notes: {},
+        correctNotes: {},
         isAnswered: false,
         isCorrect: false,
+        showErrors: false,
         showHint: false
     };
 
@@ -77,11 +74,12 @@ export default class ScaleQuestionComponent extends Component<Props, State> {
     };
 
     _handleNoteChange = (noteIndex: number, note: Note) => {
-        this.setState(_updateNote(noteIndex, note));
+        const notes = this.props.question.key.toNotes();
+        this.setState(_updateNote(noteIndex, note, notes[noteIndex].equals(note)));
     };
 
     _getNote(key: Key, noteIndex: number): $Shape<Note> {
-        if (_isRoot(noteIndex)) {
+        if (_isRoot(key, noteIndex)) {
             return key.root;
         }
         return this.state.notes[noteIndex] ? this.state.notes[noteIndex] : DEFAULT_NOTE;
@@ -89,16 +87,21 @@ export default class ScaleQuestionComponent extends Component<Props, State> {
 
     renderScaleInputs(key: Key) {
         const numberOfNotes = key.scale.construction.length + 1;
+        const notes = key.toNotes();
         return (
             <div className="scaleQuestion__notes">
                 {_range(numberOfNotes).map(noteIndex => {
+                    const note = this._getNote(key, noteIndex);
+                    const isRoot = _isRoot(key, noteIndex);
+                    const showError = !isRoot && this.state.showErrors && !this.state.correctNotes[noteIndex];
                     return (
                         <NoteInput
                             key={`note-${noteIndex}`}
-                            isRoot={_isRoot(noteIndex)}
+                            isRoot={isRoot}
                             noteIndex={noteIndex}
                             onChange={this._handleNoteChange}
-                            note={this._getNote(key, noteIndex)}/>
+                            note={note}
+                            showError={showError}/>
                     );
                 })}
                 {/*
@@ -115,7 +118,7 @@ export default class ScaleQuestionComponent extends Component<Props, State> {
     }
 
     renderHint(key: Key) {
-        const scaleConstruction = applyModeToConstruction(key.scale, key.mode);
+        const scaleConstruction = key.modeConstruction;
         const hints = [
             relativeIntervalsToRootIntervals(key.root, scaleConstruction).join(' '),
             relativeIntervalsToRootIntervals(key.root, scaleConstruction, AUGMENTED_DIMINISHED_INTERVALS).join(' '),
@@ -130,7 +133,7 @@ export default class ScaleQuestionComponent extends Component<Props, State> {
     }
 
     renderSolution(key: Key) {
-        const notes = keyToNotes(key);
+        const notes = key.toNotes();
         const modifier = this.state.isCorrect ? 'correct' : 'wrong';
         const className = `scaleQuestion__solution scaleQuestion__solution--${modifier}`;
         return (
@@ -149,7 +152,7 @@ export default class ScaleQuestionComponent extends Component<Props, State> {
         return (
             <div className="scaleQuestion">
                 <p>Complete this scale:</p>
-                <h1>{keyToString(key)}</h1>
+                <h1 className="scaleQuestion__scaleName">{String(key)}</h1>
                 <form onSubmit={this._handleAnswer}>
                     {this.renderScaleInputs(key)}
                     <button
@@ -170,27 +173,33 @@ export default class ScaleQuestionComponent extends Component<Props, State> {
     }
 }
 
-function _updateNote(noteIndex: number, note: Note) {
+function _updateNote(noteIndex: number, note: Note, isCorrect: boolean) {
     return (state: State) => {
         return {
             ...state,
             notes: {
                 ...state.notes,
                 [noteIndex]: note
-            }
+            },
+            correctNotes: {
+                ...state.correctNotes,
+                [noteIndex]: isCorrect
+            },
+            showErrors: false
         };
     };
 }
 
 function _setAnswered() {
     return (state: State, props: Props) => {
-        const actualNotes = keyToNotes(props.question.key);
+        const actualNotes = props.question.key.toNotes();
         const root = actualNotes[0];
         const notes = Object.keys(state.notes).map(noteIndex => state.notes[noteIndex]);
         const answeredNotes = [root, ...notes, root];
         return {
             ...state,
             isAnswered: true,
+            showErrors: true,
             isCorrect: Note.areNoteArraysEqual(actualNotes, answeredNotes)
         };
     };
@@ -216,6 +225,6 @@ function _getRandomInt(min: number, max: number, exclude: number = min - 1): num
     return randomInt;
 }
 
-function _isRoot(noteIndex: number): boolean {
-    return noteIndex === 0 || noteIndex === 7;
+function _isRoot(key: Key, noteIndex: number): boolean {
+    return noteIndex === 0 || noteIndex === key.scale.construction.length;
 }

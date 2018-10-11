@@ -82,6 +82,10 @@ export class Note {
         }
         return this;
     }
+
+    toString() {
+        return Note.noteToString(this);
+    }
 }
 
 export function createNote(pitch: Pitch, accidental: ?Accidental): Note {

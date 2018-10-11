@@ -3,20 +3,22 @@ import {
     ACCIDENTALS,
     createNote,
     FLAT_ACCIDENTAL,
+    NATURAL_ACCIDENTAL,
     Note,
     PITCHES,
     SHARP_ACCIDENTAL
 } from './note';
-import type {
-    Key,
-    Mode,
-    Scale
-} from './key';
+import type {Mode} from './mode';
+import {Key} from './key';
+import type {ScaleName} from './scale';
 import {
-    CHURCH_SCALES,
-    HARMONIC_MINOR_SCALE,
-    MELODIC_MINOR_SCALE
-} from './key';
+    getScaleByName,
+    Scale
+} from './scale';
+
+export type ScaleOptions = {
+    [ScaleName]: boolean
+};
 
 export const IGNORED_NOTES: Note = [
     createNote('B', SHARP_ACCIDENTAL),
@@ -25,24 +27,20 @@ export const IGNORED_NOTES: Note = [
     createNote('F', FLAT_ACCIDENTAL)
 ];
 
-export function getRandomKey(includeModes: boolean, includeHarmonicMinor: boolean, includeMelodicMinor: boolean): Key {
-    const scale = getRandomScale(includeHarmonicMinor, includeMelodicMinor);
-    const mode = includeModes ? getRandomMode(scale) : scale.modes[0];
-    return {
-        root: getRandomNote(),
+export function getRandomKey(includeAccidentals: boolean, includeModes: boolean, scaleOptions: ScaleOptions): Key {
+    const scale = getRandomScale(scaleOptions);
+    const mode = scale.modes.length > 0
+        ? includeModes ? getRandomMode(scale) : scale.modes[0]
+        : undefined;
+    return new Key(
+        getRandomNote(includeAccidentals),
         scale,
         mode
-    };
+    );
 }
 
-export function getRandomScale(includeHarmonicMinor: boolean, includeMelodicMinor: boolean): Scale {
-    let scales = CHURCH_SCALES;
-    if (includeHarmonicMinor) {
-        scales = [...scales, HARMONIC_MINOR_SCALE];
-    }
-    if (includeMelodicMinor) {
-        scales = [...scales, MELODIC_MINOR_SCALE];
-    }
+export function getRandomScale(scaleOptions: ScaleOptions): Scale {
+    const scales = _scaleOptionsToScaleNames(scaleOptions).map(getScaleByName);
     return getRandomArrayElement(scales);
 }
 
@@ -50,10 +48,14 @@ export function getRandomMode(scale: Scale): Mode {
     return getRandomArrayElement(scale.modes);
 }
 
-export function getRandomQuestion(includeModes: boolean,
-    includeHarmonicMinor: boolean,
-    includeMelodicMinor: boolean): Question {
-    const key = getRandomKey(includeModes, includeHarmonicMinor, includeMelodicMinor);
+export function getRandomQuestion(includeAccidentals: boolean,
+    includeModes: boolean,
+    scaleOptions: ScaleOptions): Question {
+    const key = getRandomKey(
+        includeAccidentals,
+        includeModes,
+        scaleOptions
+    );
     return {
         type: 'scale',
         key
@@ -68,13 +70,25 @@ export function isIgnoredNote(note: Note): boolean {
     return !IGNORED_NOTES.map((ignoredNote: Note) => ignoredNote.equals(note)).some(comparison => !comparison);
 }
 
-export function getRandomNote(): Note {
+export function getRandomNote(includeAccidentals: boolean): Note {
     const note = createNote(
         getRandomArrayElement(PITCHES),
-        getRandomArrayElement(ACCIDENTALS)
+        includeAccidentals ? getRandomArrayElement(ACCIDENTALS) : NATURAL_ACCIDENTAL
     );
     if (isIgnoredNote(note)) {
         return getRandomNote();
     }
     return note;
+}
+
+function _scaleOptionsToScaleNames(scaleOptions: ScaleOptions): ScaleName[] {
+    return Object.keys(scaleOptions).reduce((scaleNames: ScaleName[], scaleName: ScaleName) => {
+        if (scaleOptions[scaleName]) {
+            return [
+                ...scaleNames,
+                scaleName
+            ];
+        }
+        return scaleNames;
+    }, []);
 }

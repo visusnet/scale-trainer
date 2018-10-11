@@ -1,6 +1,5 @@
 // @flow
-
-import type {Key} from './key';
+import {Key} from './key';
 
 export type ScaleQuestion = {
     type: 'scale',

@@ -3,17 +3,26 @@
 .scaleQuestion {
     font: $font;
 
+    &__scaleName {
+        margin-bottom: 0.5em;
+    }
+
     &__notes {
         display: grid;
+        grid-template-columns: repeat(16, auto);
         column-gap: 1em;
+        row-gap: 1em;
     }
 
     &__note {
         display: grid;
-        grid-row: 1;
         grid-column: span 2;
         grid-template-columns: 1fr 1fr;
         column-gap: 1em;
+
+        &--error {
+            outline: 1px solid red;
+        }
     }
 
     :not(.scaleQuestion__intervalHint) + .scaleQuestion__intervalHint {
