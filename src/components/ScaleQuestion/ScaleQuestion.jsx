@@ -4,6 +4,7 @@ import type {ScaleQuestion} from '../../music/question';
 import {Key} from '../../music/key';
 import {
     ACCIDENTALS,
+    FLAT_ACCIDENTAL,
     NATURAL_ACCIDENTAL,
     Note,
     PITCHES
@@ -14,6 +15,7 @@ import {
     relativeIntervalsToRootIntervals
 } from '../../music/interval';
 import NoteInput from '../NoteInput/NoteInput';
+import Fretboard, {scaleNotes} from 'react-fretboard';
 
 type Props = {
     question: ScaleQuestion,
@@ -117,6 +119,17 @@ export default class ScaleQuestionComponent extends Component<Props, State> {
         );
     }
 
+    renderFretboard(showNotes: boolean = true) {
+        return (
+            <div className="scaleQuestion__fretboard">
+                <Fretboard
+                    skinType="strings"
+                    selectedNotes={this.props.question.key.toNotes().map(_noteToSimpleNotation)}
+                    showSelectionLabels={showNotes}/>
+            </div>
+        );
+    }
+
     renderHint(key: Key) {
         const scaleConstruction = key.modeConstruction;
         const hints = [
@@ -128,6 +141,7 @@ export default class ScaleQuestionComponent extends Component<Props, State> {
             <div className="scaleQuestion__hint">
                 <h1>Hint</h1>
                 <p>{hints[this.state.hintIndex]}</p>
+                {this.renderFretboard(false)}
             </div>
         );
     }
@@ -138,12 +152,24 @@ export default class ScaleQuestionComponent extends Component<Props, State> {
         const className = `scaleQuestion__solution scaleQuestion__solution--${modifier}`;
         return (
             <div className={className}>
-                <h1>Solution</h1>
-                {this.state.isCorrect
-                    ? <p>Your solution is correct!</p>
-                    : <p>Sorry, that's not correct.</p>}
-                <p>{notes.map(Note.noteToString).join(', ')}</p>
+                <h1>{this.state.isCorrect ? 'Awesome!' : 'Wrong'}</h1>
+                <p>{this.state.isCorrect
+                    ? 'Your solution is correct!'
+                    : `This would have been the correct answer: ${notes.map(Note.noteToString).join(' ')}`}</p>
+                {this.renderFretboard()}
             </div>
+        );
+    }
+
+    renderActions() {
+        const answerDisabled = !this._canBeAnswered && !this.state.isAnswered;
+        const hintDisabled = this.state.isAnswered;
+        return (
+            <>
+                <button onClick={this._handleAnswer} disabled={answerDisabled}>Answer</button>
+                <button onClick={this._handleyHintClick} disabled={hintDisabled}>Hint</button>
+                <button onClick={this._handleNextClick}>Next</button>
+            </>
         );
     }
 
@@ -155,16 +181,7 @@ export default class ScaleQuestionComponent extends Component<Props, State> {
                 <h1 className="scaleQuestion__scaleName">{String(key)}</h1>
                 <form onSubmit={this._handleAnswer}>
                     {this.renderScaleInputs(key)}
-                    <button
-                        onClick={this._handleAnswer}
-                        disabled={!this._canBeAnswered && !this.state.isAnswered}>
-                        Answer
-                    </button>
-                    <button
-                        onClick={this._handleHintClick}>
-                        Hint
-                    </button>
-                    <button onClick={this._handleNextClick}>Next</button>
+                    {this.renderActions()}
                     {this.state.showHint && this.renderHint(key)}
                     {this.state.isAnswered && this.renderSolution(key)}
                 </form>
@@ -200,6 +217,7 @@ function _setAnswered() {
             ...state,
             isAnswered: true,
             showErrors: true,
+            showHint: false,
             isCorrect: Note.areNoteArraysEqual(actualNotes, answeredNotes)
         };
     };
@@ -209,6 +227,7 @@ function _showHint() {
     return (state: State) => ({
         ...state,
         showHint: true,
+        isCorrect: false,
         hintIndex: _getRandomInt(0, 2, state.hintIndex)
     });
 }
@@ -227,4 +246,12 @@ function _getRandomInt(min: number, max: number, exclude: number = min - 1): num
 
 function _isRoot(key: Key, noteIndex: number): boolean {
     return noteIndex === 0 || noteIndex === key.scale.construction.length;
+}
+
+function _noteToSimpleNotation(note: Note): string {
+    const accidental = note.accidental === NATURAL_ACCIDENTAL
+        ? ''
+        : note.accidental === FLAT_ACCIDENTAL
+            ? 'b' : '#';
+    return note.pitch + accidental;
 }

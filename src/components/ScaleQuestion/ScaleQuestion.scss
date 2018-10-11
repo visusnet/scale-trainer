@@ -100,6 +100,12 @@
         }
     }
 
+    &__fretboard > div {
+        color: black;
+        padding: 1em 0 0.5em;
+        box-shadow: 0 0.5em 1em black;
+    }
+
     button {
         font: $font;
         background-color: $button-background-color;
