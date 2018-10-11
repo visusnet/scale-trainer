@@ -15,7 +15,7 @@ import {
     relativeIntervalsToRootIntervals
 } from '../../music/interval';
 import NoteInput from '../NoteInput/NoteInput';
-import Fretboard, {scaleNotes} from 'react-fretboard';
+import Fretboard from 'react-fretboard';
 
 type Props = {
     question: ScaleQuestion,
@@ -89,7 +89,6 @@ export default class ScaleQuestionComponent extends Component<Props, State> {
 
     renderScaleInputs(key: Key) {
         const numberOfNotes = key.scale.construction.length + 1;
-        const notes = key.toNotes();
         return (
             <div className="scaleQuestion__notes">
                 {_range(numberOfNotes).map(noteIndex => {
@@ -106,15 +105,6 @@ export default class ScaleQuestionComponent extends Component<Props, State> {
                             showError={showError}/>
                     );
                 })}
-                {/*
-                <div className="scaleQuestion__intervalHint">hint</div>
-                <div className="scaleQuestion__intervalHint">hint</div>
-                <div className="scaleQuestion__intervalHint">hint</div>
-                <div className="scaleQuestion__intervalHint">hint</div>
-                <div className="scaleQuestion__intervalHint">hint</div>
-                <div className="scaleQuestion__intervalHint">hint</div>
-                <div className="scaleQuestion__intervalHint">hint</div>
-                */}
             </div>
         );
     }

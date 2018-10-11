@@ -25,19 +25,6 @@
         }
     }
 
-    :not(.scaleQuestion__intervalHint) + .scaleQuestion__intervalHint {
-        grid-column: 2 / span 2;
-    }
-
-    &__intervalHint {
-        grid-row: 2;
-        text-align: center;
-        grid-column: span 2;
-        border-left: 1px solid black;
-        border-right: 1px solid black;
-        border-bottom: 1px solid black;
-    }
-
     &__pitch {
         input {
             font-size: 60px;
