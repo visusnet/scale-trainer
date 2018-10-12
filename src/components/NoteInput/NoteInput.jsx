@@ -13,12 +13,14 @@ import {
     SHARP_ACCIDENTAL
 } from '../../music/note';
 import AccidentalInput from '../AccidentalInput/AccidentalInput';
+import classNames from 'classnames';
 
 type NoteInputChangeHandler = (noteIndex: number, note: Note) => void;
 type SwitchNoteHandler = (nextNoteIndex: number) => void;
 
 type Props = {
     isRoot: boolean,
+    isHighlighted: boolean,
     isSelected: boolean,
     note: Note,
     noteIndex: number,
@@ -34,7 +36,11 @@ const KEY_CODE_ARROW_DOWN = 40;
 
 export default function NoteInput(props: Props) {
     const {isRoot, isSelected, noteIndex, onChange, onSwitchNote, note} = props;
-    const className = `scaleQuestion__note${props.showError ? ' scaleQuestion__note--error' : ''}`;
+    const className = classNames({
+        'scaleQuestion__note': true,
+        'scaleQuestion__note--error': props.showError,
+        'scaleQuestion__note--highlighted': props.isHighlighted
+    });
     return (
         <div className={className} key={`note-${noteIndex}${isSelected ? '-selected' : ''}`}>
             <div className="scaleQuestion__pitch">

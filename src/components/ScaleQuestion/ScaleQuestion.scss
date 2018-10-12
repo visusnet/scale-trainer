@@ -38,6 +38,10 @@
             &--error {
                 outline: 1px solid red;
             }
+
+            &--highlighted {
+                outline: 3px solid $color-light-blue;
+            }
         }
 
         &__pitch {
@@ -80,7 +84,7 @@
         }
 
         &__actions {
-            @include grid(3);
+            @include grid(4, 1, 0);
             position: fixed;
             bottom: 1em;
             left: 0;

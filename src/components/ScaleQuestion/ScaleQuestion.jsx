@@ -5,7 +5,6 @@ import {Key} from '../../music/key';
 import {
     ACCIDENTALS,
     createNote,
-    FLAT_ACCIDENTAL,
     NATURAL_ACCIDENTAL,
     Note,
     PITCHES
@@ -17,6 +16,7 @@ import {
 } from '../../music/interval';
 import NoteInput from '../NoteInput/NoteInput';
 import Fretboard from 'react-fretboard';
+import Arpeggiator from '../../player/arpeggiator';
 
 type Props = {
     question: ScaleQuestion,
@@ -31,6 +31,7 @@ type State = {
     showErrors: boolean,
     showHint: boolean,
     hintIndex: number,
+    highlightedNoteIndex: ?number,
     selectedNoteIndex: number
 }
 
@@ -73,8 +74,22 @@ export default class ScaleQuestionComponent extends Component<Props, State> {
         this.setState(_showHint());
     };
 
+    _handlePlayClick = (e: any) => {
+        e.preventDefault();
+        Arpeggiator.play(this.props.question.key.toNotes(), this._handlePlayNote, this._handleStop);
+    };
+
+    _handlePlayNote = (noteIndex: number) => {
+        this.setState(_highlightNote(noteIndex));
+    };
+
+    _handleStop = () => {
+        this.setState(_removeNoteHighlights());
+    };
+
     _handleNextClick = (e: any) => {
         e.preventDefault();
+        Arpeggiator.stop(this._handleStop);
         this.props.onNextClick();
     };
 
@@ -111,6 +126,7 @@ export default class ScaleQuestionComponent extends Component<Props, State> {
                             key={`note-${noteIndex}`}
                             isRoot={isRoot}
                             isSelected={isSelected}
+                            isHighlighted={noteIndex === this.state.highlightedNoteIndex}
                             noteIndex={noteIndex}
                             onChange={this._handleNoteChange}
                             onSwitchNote={this._handleSwitchNote}
@@ -127,7 +143,7 @@ export default class ScaleQuestionComponent extends Component<Props, State> {
             <div className="scaleQuestion__fretboard">
                 <Fretboard
                     skinType="strings"
-                    selectedNotes={this.props.question.key.toNotes().map(_noteToSimpleNotation)}
+                    selectedNotes={this.props.question.key.toNotes().map((note: Note) => note.simpleNotation)}
                     showSelectionLabels={showNotes}/>
             </div>
         );
@@ -171,6 +187,7 @@ export default class ScaleQuestionComponent extends Component<Props, State> {
             <div className="scaleQuestion__actions">
                 <button onClick={this._handleAnswer} disabled={answerDisabled}>Answer</button>
                 <button onClick={this._handleHintClick} disabled={hintDisabled}>Hint</button>
+                <button onClick={this._handlePlayClick}>Play</button>
                 <button onClick={this._handleNextClick}>Next</button>
             </div>
         );
@@ -249,6 +266,20 @@ function _selectNote(selectedNoteIndex: number) {
     });
 }
 
+function _highlightNote(highlightedNoteIndex: number) {
+    return (state: State) => ({
+        ...state,
+        highlightedNoteIndex
+    });
+}
+
+function _removeNoteHighlights() {
+    return (state: State) => ({
+        ...state,
+        highlightedNoteIndex: undefined
+    });
+}
+
 function _range(length: number): number[] {
     return Array.from(Array(length).keys());
 }
@@ -263,14 +294,6 @@ function _getRandomInt(min: number, max: number, exclude: number = min - 1): num
 
 function _isRoot(key: Key, noteIndex: number): boolean {
     return noteIndex === 0 || noteIndex === key.scale.construction.length;
-}
-
-function _noteToSimpleNotation(note: Note): string {
-    const accidental = note.accidental === NATURAL_ACCIDENTAL
-        ? ''
-        : note.accidental === FLAT_ACCIDENTAL
-            ? 'b' : '#';
-    return note.pitch + accidental;
 }
 
 function _restrictNumber(value: number, min: number, max: number) {

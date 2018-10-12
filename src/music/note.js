@@ -8,6 +8,12 @@ export const NATURAL_ACCIDENTAL: Accidental = '♮';
 export const FLAT_ACCIDENTAL: Accidental = '♭';
 export const ACCIDENTALS: Accidental[] = [SHARP_ACCIDENTAL, NATURAL_ACCIDENTAL, FLAT_ACCIDENTAL];
 
+const ACCIDENTAL_SIMPLE_NOTATION_MAP = {
+    [NATURAL_ACCIDENTAL]: '',
+    [SHARP_ACCIDENTAL]: '#',
+    [FLAT_ACCIDENTAL]: 'b'
+};
+
 export class Note {
     pitch: ?Pitch;
     accidental: Accidental;
@@ -33,6 +39,10 @@ export class Note {
             const note2 = notes2[noteIndex];
             return note1.equals(note2);
         }).some(comparison => !comparison);
+    }
+
+    get simpleNotation(): string {
+        return this.pitch + (this.accidental ? ACCIDENTAL_SIMPLE_NOTATION_MAP[this.accidental] : '');
     }
 
     equals(note: Note): boolean {
