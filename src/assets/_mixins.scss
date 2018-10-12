@@ -9,6 +9,12 @@
     }
 }
 
+@mixin auto-fill-grid($max-width: 47px, $gap: 1em) {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, $max-width);
+    grid-gap: $gap;
+}
+
 @mixin fill-row($numberOfColumns: 12) {
     grid-column: col-start / span $numberOfColumns;
 }
