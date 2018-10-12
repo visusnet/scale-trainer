@@ -187,7 +187,7 @@ export default class ScaleQuestionComponent extends Component<Props, State> {
             <div className="scaleQuestion__actions">
                 <button onClick={this._handleAnswer} disabled={answerDisabled}>Answer</button>
                 <button onClick={this._handleHintClick} disabled={hintDisabled}>Hint</button>
-                <button onClick={this._handlePlayClick}>Play</button>
+                <button className="scaleQuestion__playButton" onClick={this._handlePlayClick}>Play</button>
                 <button onClick={this._handleNextClick}>Next</button>
             </div>
         );

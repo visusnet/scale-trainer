@@ -84,11 +84,15 @@
         }
 
         &__actions {
-            @include grid(4, 1, 0);
+            @include grid(3, 1, 0);
             position: fixed;
             bottom: 1em;
             left: 0;
             width: 100%;
+        }
+
+        &__playButton {
+            display: none;
         }
 
         &__solution {
@@ -131,10 +135,15 @@
 
     @include breakpoint(desktop) {
         &__actions {
+            @include grid(4, 1, 0);
             display: block;
             position: relative;
             text-align: center;
             margin: 1em;
+        }
+
+        &__playButton {
+            display: inline-block;
         }
     }
 

@@ -57,7 +57,8 @@ export class Key {
 
     toString(): string {
         const description = this.description;
-        return `${description.rootNote} ${description.scaleName} ${description.modeName} (${description.alternativeModeName})`.trim();
+        return `${description.rootNote} ${description.scaleName} ${description.modeName ||
+        ''} ${description.alternativeModeName ? `(${description.alternativeModeName})` : ''}`.trim();
     }
 }
 
