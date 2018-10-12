@@ -179,6 +179,7 @@ export default class ScaleQuestionComponent extends Component<Props, State> {
     render() {
         const key = this.props.question.key;
         const description = key.description;
+        console.log({description})
         const modeName = description.modeName ? ` ${description.modeName}` : '';
         const scaleName = `${description.rootNote} ${description.scaleName}${modeName}`;
         const alternativeModeName = description.alternativeModeName ? description.alternativeModeName : NBSP;

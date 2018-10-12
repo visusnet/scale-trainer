@@ -24,14 +24,14 @@ export class Key {
     }
 
     get description(): KeyDescription {
-        if (this.scale.modes.length === 0) {
-            return {};
-        }
-        const modeIndex = this.scale.modes.indexOf(this.mode);
         const description: KeyDescription = {
             rootNote: String(this.root),
             scaleName: String(this.scale)
         };
+        if (this.scale.modes.length === 0) {
+            return description;
+        }
+        const modeIndex = this.scale.modes.indexOf(this.mode);
         return modeIndex === 0
             ? description
             : {
