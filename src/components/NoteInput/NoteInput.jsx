@@ -126,7 +126,6 @@ function _toPitch(value: string): Pitch | '' {
 }
 
 function _placeCaretAtEnd(el: any) {
-    console.log(el.selectionStart);
     if (typeof el.selectionStart == 'number') {
         el.selectionStart = el.selectionEnd = el.value.length + 1;
     } else if (typeof el.createTextRange !== 'undefined') {

@@ -6,6 +6,12 @@ body {
     min-width: 250px;
 }
 
+@include breakpoint(mobile) {
+    input {
+        padding: 0;
+    }
+}
+
 .breakpoint {
     &--desktop {
         display: none;
