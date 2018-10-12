@@ -1,57 +1,145 @@
 @import "../../assets/variables";
+@import "../../assets/mixins";
 
 .scaleQuestion {
-    font: $font;
+    @include fill-row;
+    @include grid(12);
 
-    &__scaleName {
-        margin-bottom: 0.5em;
+    @include breakpoint(mobile) {
+        &__scaleName {
+            @include headline(1.5em);
+        }
+
+        &__alternativeModeName {
+            @include headline(1em);
+        }
+
+        &__question, &__answer {
+            @include fill-row;
+            margin: 0 1em;
+
+            p {
+                margin-bottom: 0.5em;
+                margin-top: 0;
+            }
+        }
+
+        &__notes {
+            @include grid(8);
+            max-width: 1000px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        &__note {
+            @include column-span(2);
+            @include grid(2);
+
+            &--error {
+                outline: 1px solid red;
+            }
+        }
+
+        &__pitch {
+            @include fill-row(2);
+            text-align: center;
+
+            input {
+                font-size: 45px;
+                width: 1em;
+                text-align: center;
+                border: 1px solid grayscale($color-light-blue);
+                outline: 0;
+
+                &:focus {
+                    border-color: $button-background-color-hover;
+                }
+            }
+        }
+
+        &__accidentals {
+            @include fill-row(2);
+        }
+
+        &__accidental {
+            text-align: center;
+
+            label {
+                display: inline-flex;
+                align-items: center;
+            }
+        }
+
+        input:checked + &__accidentalValue {
+            font-weight: bold;
+        }
+
+        input:not(:checked) + &__accidentalValue {
+            font-weight: lighter;
+            color: grayscale($color-light-blue);
+        }
+
+        &__actions {
+            @include grid(3);
+            position: fixed;
+            bottom: 1em;
+            left: 0;
+            width: 100%;
+        }
+
+        &__solution {
+            @include fill-row;
+        }
+
+        &__solution, &__hint {
+            @include fill-row;
+        }
+    }
+
+    @include breakpoint(phablet) {
+        &__notes {
+            @include grid(12);
+        }
+    }
+
+    @include breakpoint(tablet) {
+        &__notes {
+            @include grid(16);
+        }
+
+        &__note {
+            @include grid(2);
+        }
+
+        &__pitch {
+            @include column-span(1);
+            text-align: right;
+        }
+
+        &__accidentals {
+            @include column-span(1);
+        }
+
+        &__accidental {
+            text-align: left;
+        }
+    }
+
+    @include breakpoint(desktop) {
+        &__actions {
+            display: block;
+            position: relative;
+            text-align: center;
+            margin: 1em;
+        }
     }
 
     &__notes {
-        display: grid;
-        grid-template-columns: repeat(16, auto);
-        column-gap: 1em;
-        row-gap: 1em;
     }
 
     &__note {
-        display: grid;
-        grid-column: span 2;
-        grid-template-columns: 1fr 1fr;
-        column-gap: 1em;
-
         &--error {
             outline: 1px solid red;
-        }
-    }
-
-    &__pitch {
-        input {
-            font-size: 60px;
-            width: 1em;
-            text-align: center;
-            border: 1px solid grayscale($color-light-blue);
-            outline: 0;
-
-            &:focus {
-                border-color: $button-background-color-hover;
-            }
-        }
-    }
-
-    &__accidentals {
-        display: flex;
-        flex-direction: column;
-        margin-left: 0.5em;
-    }
-
-    &__accidental {
-        flex: 1;
-        display: flex;
-
-        label {
-            display: inline-flex;
-            align-items: center;
         }
     }
 
@@ -62,8 +150,7 @@
         h1 {
             font-size: $font-size;
             font-weight: bold;
-            padding: 0;
-            margin-bottom: 0.5em;
+            margin: 0;
         }
 
         p:last-child {
@@ -98,11 +185,21 @@
         background-color: $button-background-color;
         border: 0;
         padding: 1em;
-        margin: 1em;
+        margin: 0;
         color: white;
         font-weight: bold;
         transition: all 0.2s;
-        -webkit-transition: all 0.2s;
+        max-width: 200px;
+
+        @include breakpoint(phablet) {
+            margin-left: auto;
+            margin-right: auto;
+            min-width: 108px;
+        }
+
+        @include breakpoint(desktop) {
+            margin: 1em;
+        }
 
         &:hover, &:active, &:focus {
             outline: 0;

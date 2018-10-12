@@ -5,6 +5,13 @@ import type {ScaleConstruction} from './scale';
 import {Scale} from './scale';
 import type {Mode} from './mode';
 
+export type KeyDescription = {
+    rootNote: string,
+    scaleName: string,
+    modeName?: string,
+    alternativeModeName?: string
+}
+
 export class Key {
     root: Note;
     scale: Scale;
@@ -16,12 +23,22 @@ export class Key {
         this.mode = mode;
     }
 
-    get modeName(): string {
+    get description(): KeyDescription {
         if (this.scale.modes.length === 0) {
-            return '';
+            return {};
         }
-        const scaleIndex = this.scale.modes.indexOf(this.mode);
-        return scaleIndex === 0 ? '' : `${this.mode} (mode ${scaleIndex + 1} of ${this.scale.name})`;
+        const modeIndex = this.scale.modes.indexOf(this.mode);
+        const description: KeyDescription = {
+            rootNote: String(this.root),
+            scaleName: String(this.scale)
+        };
+        return modeIndex === 0
+            ? description
+            : {
+                ...description,
+                modeName: String(this.mode),
+                alternativeModeName: `mode ${modeIndex + 1} of ${this.scale.name}`
+            };
     }
 
     toNotes(): Note[] {
@@ -39,7 +56,8 @@ export class Key {
     }
 
     toString(): string {
-        return `${this.root} ${this.scale} ${this.modeName}`.trim();
+        const description = this.description;
+        return `${description.rootNote} ${description.scaleName} ${description.modeName} (${description.alternativeModeName})`.trim();
     }
 }
 

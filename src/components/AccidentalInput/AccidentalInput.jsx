@@ -29,7 +29,7 @@ export default function AccidentalInput(props: Props) {
                     onChange={_createHandleAccidentalChange(noteIndex, accidental, onChange)}
                     disabled={isRoot}
                 />
-                {accidental}
+                <span className="scaleQuestion__accidentalValue">{accidental}</span>
             </label>
         </div>
     );

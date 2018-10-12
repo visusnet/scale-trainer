@@ -1,0 +1,55 @@
+@import "variables";
+
+@mixin grid($numberOfColumns, $numberOfRows: null, $gap: 1em) {
+    display: grid;
+    grid-template-columns: repeat($numberOfColumns, [col-start] 1fr);
+    grid-gap: $gap;
+    @if $numberOfRows != null {
+        grid-template-rows: repeat($numberOfRows, 1fr);
+    }
+}
+
+@mixin fill-row($numberOfColumns: 12) {
+    grid-column: col-start / span $numberOfColumns;
+}
+
+@mixin column-span($columnSpan) {
+    grid-column: span $columnSpan;
+}
+
+@mixin breakpoint($screenType) {
+    @if $screenType == desktop {
+        @media (min-width: 1200px) { @content; }
+    } @else if $screenType == tablet {
+        @media (min-width: 768px) { @content; }
+    } @else if $screenType == phablet {
+        @media (min-width: 360px) { @content; }
+    } @else if $screenType == mobile {
+        @content;
+    }
+}
+
+@mixin box {
+    border: 1px solid gray;
+    background-color: white;
+}
+
+@mixin icon-button($url) {
+    background-color: white;
+    background-image: url($url);
+    width: 44px;
+    height: 44px;
+    cursor: pointer;
+    border: 0;
+}
+
+@mixin headline($font-size) {
+    margin: 0;
+    font-size: $font-size;
+}
+
+@mixin debug() {
+    @if $debug == true {
+        @content;
+    }
+}

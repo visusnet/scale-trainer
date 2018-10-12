@@ -1,13 +1,16 @@
 import React, {Component} from 'react';
 import './App.scss';
-import ScaleTrainer from './ScaleTrainer';
+import ScaleTrainer from './components/ScaleTrainer/ScaleTrainer';
 
 class App extends Component {
     render() {
         return (
-            <div className="app">
+            <>
                 <ScaleTrainer/>
-            </div>
+                <div className="breakpoint--mobile">Mobile</div>
+                <div className="breakpoint--tablet">Tablet</div>
+                <div className="breakpoint--desktop">Desktop</div>
+            </>
         );
     }
 }

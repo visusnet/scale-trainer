@@ -1,18 +1,19 @@
 // @flow
 import React, {Component} from 'react';
-import ScaleQuestion from './components/ScaleQuestion/ScaleQuestion';
-import type {ScaleOptions} from './music/random';
-import {getRandomQuestion} from './music/random';
-import type {Question} from './music/question';
+import ScaleQuestion from '../ScaleQuestion/ScaleQuestion';
+import type {ScaleOptions} from '../../music/random';
+import {getRandomQuestion} from '../../music/random';
+import type {Question} from '../../music/question';
 import './ScaleTrainer.scss';
-import type {ScaleName} from './music/scale';
+import type {ScaleName} from '../../music/scale';
 import {
     MAJOR_SCALE,
     Scale,
     SCALES
-} from './music/scale';
+} from '../../music/scale';
 
 type State = {
+    isMenuOpen: boolean,
     question: ?Question,
     options: {
         includeAccidentals: boolean,
@@ -25,6 +26,7 @@ const DEFAULT_SCALES = SCALES.reduce((scales: ScaleOptions, scale: Scale) => ({.
 
 export default class ScaleTrainer extends Component<void, State> {
     state = {
+        isMenuOpen: false,
         question: undefined,
         options: {
             includeAccidentals: _getBooleanFromLocalStorage('includeAccidentals'),
@@ -53,6 +55,10 @@ export default class ScaleTrainer extends Component<void, State> {
         this.setState(_updateScaleOption(scale, value), this._updateQuestion);
     };
 
+    _handleMenuButtonClick = () => {
+        this.setState(_toggleMenu());
+    };
+
     _updateQuestion = () => {
         this.setState(state => {
             return ({
@@ -77,24 +83,26 @@ export default class ScaleTrainer extends Component<void, State> {
         const onlyMajorScaleSelected = this._onlyMajorScaleSelected;
         return (
             <div className="scaleTrainer__options">
-                <fieldset>
-                    <legend>Notes</legend>
-                    <label htmlFor="includeAccidentals">
-                        <input
-                            type="checkbox"
-                            id="includeAccidentals"
-                            name="includeAccidentals"
-                            value="includeAccidentals"
-                            checked={this.state.options.includeAccidentals}
-                            onChange={this._handleOptionChange}/>
-                        Accidentals
-                    </label>
-                </fieldset>
-                <fieldset>
-                    <legend>Scales</legend>
-                    <div className="scaleTrainer__scales">
+                <details className="scaleTrainer__accidentals">
+                    <summary>Notes</summary>
+                    <div className="scaleTrainer__menuItemGroup">
+                        <label htmlFor="includeAccidentals" className="scaleTrainer__menuItem">
+                            <input
+                                type="checkbox"
+                                id="includeAccidentals"
+                                name="includeAccidentals"
+                                value="includeAccidentals"
+                                checked={this.state.options.includeAccidentals}
+                                onChange={this._handleOptionChange}/>
+                            Accidentals
+                        </label>
+                    </div>
+                </details>
+                <details className="scaleTrainer__scales">
+                    <summary>Scales</summary>
+                    <div className="scaleTrainer__menuItemGroup">
                         {SCALES.map((scale: Scale) => (
-                            <label htmlFor={scale.name} key={scale.name}>
+                            <label htmlFor={scale.name} key={scale.name} className="scaleTrainer__menuItem">
                                 <input
                                     type="checkbox"
                                     id={scale.name}
@@ -107,20 +115,40 @@ export default class ScaleTrainer extends Component<void, State> {
                             </label>
                         ))}
                     </div>
-                </fieldset>
-                <fieldset>
-                    <legend>Modes</legend>
-                    <label htmlFor="includeModes">
-                        <input
-                            type="checkbox"
-                            id="includeModes"
-                            name="includeModes"
-                            value="includeModes"
-                            checked={this.state.options.includeModes}
-                            onChange={this._handleOptionChange}/>
-                        Modes
-                    </label>
-                </fieldset>
+                </details>
+                <details className="scaleTrainer__modes">
+                    <summary>Modes</summary>
+                    <div className="scaleTrainer__menuItemGroup">
+                        <label htmlFor="includeModes" className="scaleTrainer__menuItem">
+                            <input
+                                type="checkbox"
+                                id="includeModes"
+                                name="includeModes"
+                                value="includeModes"
+                                checked={this.state.options.includeModes}
+                                onChange={this._handleOptionChange}/>
+                            Modes
+                        </label>
+                    </div>
+                </details>
+            </div>
+        );
+    }
+
+    renderMenuBar() {
+        return (
+            <div className="scaleTrainer__menuBar">
+                <button className="scaleTrainer__openMenuButton" onClick={this._handleMenuButtonClick}/>
+            </div>
+        );
+    }
+
+    renderMenu() {
+        const className = `scaleTrainer__menu${this.state.isMenuOpen ? ' scaleTrainer__menu--open' : ''}`;
+        return (
+            <div className={className}>
+                <button className="scaleTrainer__closeMenuButton" onClick={this._handleMenuButtonClick}/>
+                {this.renderOptions()}
             </div>
         );
     }
@@ -128,13 +156,14 @@ export default class ScaleTrainer extends Component<void, State> {
     render() {
         const question = this.state.question;
         return (
-            <>
-                {this.renderOptions()}
+            <div className="scaleTrainer">
+                {this.renderMenuBar()}
+                {this.renderMenu()}
                 {question && question.type === 'scale'
                     ? <ScaleQuestion key={_questionToString(question)} question={question}
                         onNextClick={this._handleNextClick}/>
                     : <div>Loading...</div>}
-            </>
+            </div>
         );
     }
 }
@@ -169,6 +198,12 @@ function _updateScaleOption(scale: string, value: boolean) {
             }
         };
     };
+}
+
+function _toggleMenu() {
+    return (state: State) => ({
+        isMenuOpen: !state.isMenuOpen
+    });
 }
 
 function _questionToString(question: Question): string {

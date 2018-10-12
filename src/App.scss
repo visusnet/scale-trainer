@@ -1,9 +1,56 @@
-.app {
-    width: 1200px;
-    margin-left: auto;
-    margin-right: auto;
+@import "assets/variables";
+@import "assets/mixins";
+
+body {
+    font: $font;
+    min-width: 250px;
 }
 
-h1 {
-    margin: 0;
+.breakpoint {
+    &--desktop {
+        display: none;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        background-color: green;
+        color: white;
+        text-align: center;
+
+        @include debug() {
+            @include breakpoint(desktop) {
+                display: block;
+            }
+        }
+    }
+
+    &--tablet {
+        display: none;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        background-color: yellow;
+        text-align: center;
+
+        @include debug() {
+            @include breakpoint(tablet) {
+                display: block;
+            }
+        }
+    }
+
+    &--mobile {
+        display: none;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        background-color: red;
+        color: white;
+        text-align: center;
+
+        @include debug() {
+            @include breakpoint(mobile) {
+                display: block;
+            }
+        }
+    }
 }

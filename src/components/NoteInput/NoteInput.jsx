@@ -8,25 +8,35 @@ import type {
 import {
     ACCIDENTALS,
     createNote,
-    PITCHES
+    FLAT_ACCIDENTAL,
+    PITCHES,
+    SHARP_ACCIDENTAL
 } from '../../music/note';
 import AccidentalInput from '../AccidentalInput/AccidentalInput';
 
 type NoteInputChangeHandler = (noteIndex: number, note: Note) => void;
+type SwitchNoteHandler = (nextNoteIndex: number) => void;
 
 type Props = {
     isRoot: boolean,
+    isSelected: boolean,
     note: Note,
     noteIndex: number,
     onChange: NoteInputChangeHandler,
+    onSwitchNote: SwitchNoteHandler,
     showError: boolean
 };
 
+const KEY_CODE_ARROW_LEFT = 37;
+const KEY_CODE_ARROW_UP = 38;
+const KEY_CODE_ARROW_RIGHT = 39;
+const KEY_CODE_ARROW_DOWN = 40;
+
 export default function NoteInput(props: Props) {
-    const {isRoot, noteIndex, onChange, note} = props;
+    const {isRoot, isSelected, noteIndex, onChange, onSwitchNote, note} = props;
     const className = `scaleQuestion__note${props.showError ? ' scaleQuestion__note--error' : ''}`;
     return (
-        <div className={className} key={`note-${noteIndex}`}>
+        <div className={className} key={`note-${noteIndex}${isSelected ? '-selected' : ''}`}>
             <div className="scaleQuestion__pitch">
                 <input
                     type="text"
@@ -34,9 +44,11 @@ export default function NoteInput(props: Props) {
                     value={note.pitch || ''}
                     disabled={isRoot}
                     tabIndex={noteIndex}
-                    autoFocus={noteIndex === 1}
+                    autoFocus={isSelected}
+                    onFocus={(e) => _placeCaretAtEnd(e.target)}
                     onChange={_createHandlePitchChange(noteIndex, note.accidental, onChange)}
-                    maxLength={1}
+                    onKeyDown={_createHandlePitchKeyDown(noteIndex, note, onChange, onSwitchNote)}
+                    maxLength={2}
                 />
             </div>
             <div className="scaleQuestion__accidentals">
@@ -58,11 +70,38 @@ export default function NoteInput(props: Props) {
 function _createHandlePitchChange(noteIndex: number, accidental: Accidental, onChange: NoteInputChangeHandler) {
     return (e: any) => {
         e.preventDefault();
+        const pitchCandidate = e.target.value
+            .toUpperCase()
+            .substr(-1); // maxLength is 2 which allows multiple pitches to be entered but we use only the last.
         const note = createNote(
-            _toPitch(e.target.value.toUpperCase()),
+            _toPitch(pitchCandidate),
             accidental
         );
         onChange(noteIndex, note);
+    };
+}
+
+function _createHandlePitchKeyDown(noteIndex: number,
+    note: Note,
+    onChange: NoteInputChangeHandler,
+    onSwitchNote: SwitchNoteHandler) {
+    return (e: any) => {
+        const isArrowDown = e.keyCode === KEY_CODE_ARROW_DOWN;
+        const isArrowUp = e.keyCode === KEY_CODE_ARROW_UP;
+        const isArrowLeft = e.keyCode === KEY_CODE_ARROW_LEFT;
+        const isArrowRight = e.keyCode === KEY_CODE_ARROW_RIGHT;
+        if (isArrowDown || isArrowUp) {
+            e.preventDefault();
+            const nextNote = note
+                ? isArrowDown ? note.getLoweredNote() : note.getRaisedNote()
+                : isArrowDown ? createNote(note.pitch, FLAT_ACCIDENTAL) : createNote(note.pitch, SHARP_ACCIDENTAL);
+            onChange(noteIndex, nextNote);
+        } else if (isArrowLeft || isArrowRight) {
+            const offset = isArrowRight ? 1 : -1;
+            onSwitchNote(noteIndex + offset);
+        } else {
+            e.target.value = _toPitch(e.key.toUpperCase());
+        }
     };
 }
 
@@ -84,4 +123,16 @@ function _toPitch(value: string): Pitch | '' {
     return PITCHES.includes(pitchCandidate)
         ? pitchCandidate
         : '';
+}
+
+function _placeCaretAtEnd(el: any) {
+    console.log(el.selectionStart);
+    if (typeof el.selectionStart == 'number') {
+        el.selectionStart = el.selectionEnd = el.value.length + 1;
+    } else if (typeof el.createTextRange !== 'undefined') {
+        el.focus();
+        var range = el.createTextRange();
+        range.collapse(false);
+        range.select();
+    }
 }

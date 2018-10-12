@@ -6,13 +6,13 @@ export const PITCHES: Pitch[] = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
 export const SHARP_ACCIDENTAL: Accidental = '♯';
 export const NATURAL_ACCIDENTAL: Accidental = '♮';
 export const FLAT_ACCIDENTAL: Accidental = '♭';
-export const ACCIDENTALS: Accidental[] = [FLAT_ACCIDENTAL, SHARP_ACCIDENTAL, NATURAL_ACCIDENTAL];
+export const ACCIDENTALS: Accidental[] = [SHARP_ACCIDENTAL, NATURAL_ACCIDENTAL, FLAT_ACCIDENTAL];
 
 export class Note {
-    pitch: Pitch;
+    pitch: ?Pitch;
     accidental: Accidental;
 
-    constructor(pitch: Pitch, accidental: Accidental) {
+    constructor(pitch: ?Pitch, accidental: Accidental) {
         this.pitch = pitch;
         this.accidental = accidental;
     }
@@ -48,6 +48,14 @@ export class Note {
 
     hasEqualAccidental(note: Note) {
         return this.accidental === note.accidental;
+    }
+
+    getRaisedNote(): Note {
+        return createNote(this.pitch, nextAccidental(this.accidental));
+    }
+
+    getLoweredNote() {
+        return createNote(this.pitch, previousAccidental(this.accidental));
     }
 
     normalizeAccidentals(preferredAccidental: Accidental = SHARP_ACCIDENTAL): Note {
@@ -86,9 +94,13 @@ export class Note {
     toString() {
         return Note.noteToString(this);
     }
+
+    clone(): Note {
+        return createNote(this.pitch, this.accidental);
+    }
 }
 
-export function createNote(pitch: Pitch, accidental: ?Accidental): Note {
+export function createNote(pitch: ?Pitch, accidental: ?Accidental): Note {
     return new Note(pitch, accidental ? accidental : NATURAL_ACCIDENTAL);
 }
 
@@ -100,4 +112,14 @@ export function previousPitch(pitch: Pitch): Pitch {
 export function nextPitch(pitch: Pitch): Pitch {
     const nextPitchIndex = (PITCHES.indexOf(pitch) + 1) % PITCHES.length;
     return PITCHES[nextPitchIndex];
+}
+
+export function previousAccidental(accidental: Accidental): Accidental {
+    const nextAccidentalIndex = (ACCIDENTALS.indexOf(accidental) + 1) % ACCIDENTALS.length;
+    return ACCIDENTALS[nextAccidentalIndex];
+}
+
+export function nextAccidental(accidental: Accidental): Accidental {
+    const nextAccidentalIndex = (ACCIDENTALS.indexOf(accidental) + ACCIDENTALS.length - 1) % ACCIDENTALS.length;
+    return ACCIDENTALS[nextAccidentalIndex];
 }

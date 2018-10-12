@@ -4,6 +4,7 @@ import type {ScaleQuestion} from '../../music/question';
 import {Key} from '../../music/key';
 import {
     ACCIDENTALS,
+    createNote,
     FLAT_ACCIDENTAL,
     NATURAL_ACCIDENTAL,
     Note,
@@ -23,18 +24,19 @@ type Props = {
 }
 
 type State = {
-    notes: {[number]: $Shape<Note>},
+    notes: {[number]: Note},
     correctNotes: {[number]: boolean},
     isAnswered: boolean,
     isCorrect: boolean,
     showErrors: boolean,
     showHint: boolean,
-    hintIndex: number
+    hintIndex: number,
+    selectedNoteIndex: number
 }
 
-const DEFAULT_NOTE: $Shape<Note> = {
-    accidental: NATURAL_ACCIDENTAL
-};
+const DEFAULT_NOTE: Note = createNote(undefined, NATURAL_ACCIDENTAL);
+
+const NBSP = '\u00A0';
 
 export default class ScaleQuestionComponent extends Component<Props, State> {
     state = {
@@ -43,7 +45,8 @@ export default class ScaleQuestionComponent extends Component<Props, State> {
         isAnswered: false,
         isCorrect: false,
         showErrors: false,
-        showHint: false
+        showHint: false,
+        selectedNoteIndex: 1
     };
 
     get _canBeAnswered(): boolean {
@@ -80,7 +83,14 @@ export default class ScaleQuestionComponent extends Component<Props, State> {
         this.setState(_updateNote(noteIndex, note, notes[noteIndex].equals(note)));
     };
 
-    _getNote(key: Key, noteIndex: number): $Shape<Note> {
+    _handleSwitchNote = (nextNoteIndex: number) => {
+        const numberOfNotes = this.props.question.key.toNotes().length;
+        const minNoteIndex = 1;
+        const maxNoteIndex = numberOfNotes - 1;
+        this.setState(_selectNote(_restrictNumber(nextNoteIndex, minNoteIndex, maxNoteIndex)));
+    };
+
+    _getNote(key: Key, noteIndex: number): Note {
         if (_isRoot(key, noteIndex)) {
             return key.root;
         }
@@ -95,12 +105,15 @@ export default class ScaleQuestionComponent extends Component<Props, State> {
                     const note = this._getNote(key, noteIndex);
                     const isRoot = _isRoot(key, noteIndex);
                     const showError = !isRoot && this.state.showErrors && !this.state.correctNotes[noteIndex];
+                    const isSelected = this.state.selectedNoteIndex === noteIndex;
                     return (
                         <NoteInput
                             key={`note-${noteIndex}`}
                             isRoot={isRoot}
+                            isSelected={isSelected}
                             noteIndex={noteIndex}
                             onChange={this._handleNoteChange}
+                            onSwitchNote={this._handleSwitchNote}
                             note={note}
                             showError={showError}/>
                     );
@@ -145,7 +158,7 @@ export default class ScaleQuestionComponent extends Component<Props, State> {
                 <h1>{this.state.isCorrect ? 'Awesome!' : 'Wrong'}</h1>
                 <p>{this.state.isCorrect
                     ? 'Your solution is correct!'
-                    : `This would have been the correct answer: ${notes.map(Note.noteToString).join(' ')}`}</p>
+                    : `Sorry, but this is correct: ${notes.map(Note.noteToString).join(' ')}`}</p>
                 {this.renderFretboard()}
             </div>
         );
@@ -155,26 +168,33 @@ export default class ScaleQuestionComponent extends Component<Props, State> {
         const answerDisabled = !this._canBeAnswered && !this.state.isAnswered;
         const hintDisabled = this.state.isAnswered;
         return (
-            <>
+            <div className="scaleQuestion__actions">
                 <button onClick={this._handleAnswer} disabled={answerDisabled}>Answer</button>
-                <button onClick={this._handleyHintClick} disabled={hintDisabled}>Hint</button>
+                <button onClick={this._handleHintClick} disabled={hintDisabled}>Hint</button>
                 <button onClick={this._handleNextClick}>Next</button>
-            </>
+            </div>
         );
     }
 
     render() {
         const key = this.props.question.key;
+        const description = key.description;
+        const modeName = description.modeName ? ` ${description.modeName}` : '';
+        const scaleName = `${description.rootNote} ${description.scaleName}${modeName}`;
+        const alternativeModeName = description.alternativeModeName ? description.alternativeModeName : NBSP;
         return (
             <div className="scaleQuestion">
-                <p>Complete this scale:</p>
-                <h1 className="scaleQuestion__scaleName">{String(key)}</h1>
-                <form onSubmit={this._handleAnswer}>
+                <div className="scaleQuestion__question">
+                    <p>Complete this scale:</p>
+                    <h1 className="scaleQuestion__scaleName">{scaleName}</h1>
+                    {<h2 className="scaleQuestion__alternativeModeName">{alternativeModeName}</h2>}
+                </div>
+                <div className="scaleQuestion__answer">
                     {this.renderScaleInputs(key)}
                     {this.renderActions()}
-                    {this.state.showHint && this.renderHint(key)}
-                    {this.state.isAnswered && this.renderSolution(key)}
-                </form>
+                </div>
+                {this.state.showHint && this.renderHint(key)}
+                {this.state.isAnswered && this.renderSolution(key)}
             </div>
         );
     }
@@ -222,6 +242,13 @@ function _showHint() {
     });
 }
 
+function _selectNote(selectedNoteIndex: number) {
+    return (state: State) => ({
+        ...state,
+        selectedNoteIndex
+    });
+}
+
 function _range(length: number): number[] {
     return Array.from(Array(length).keys());
 }
@@ -244,4 +271,8 @@ function _noteToSimpleNotation(note: Note): string {
         : note.accidental === FLAT_ACCIDENTAL
             ? 'b' : '#';
     return note.pitch + accidental;
+}
+
+function _restrictNumber(value: number, min: number, max: number) {
+    return ((value - min) % (max - min) + max - min) % (max - min) + min;
 }
