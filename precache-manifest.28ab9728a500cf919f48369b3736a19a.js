@@ -12,19 +12,19 @@ self.__precacheManifest = [
     "url": "/scale-trainer/static/js/runtime~main.0f476909.js"
   },
   {
-    "revision": "2b7fc83b3514bab8e39c",
-    "url": "/scale-trainer/static/js/main.2b7fc83b.chunk.js"
+    "revision": "fddda01bf39c936530ff",
+    "url": "/scale-trainer/static/js/main.fddda01b.chunk.js"
   },
   {
     "revision": "b174f5d1cc8203652a21",
     "url": "/scale-trainer/static/js/1.b174f5d1.chunk.js"
   },
   {
-    "revision": "2b7fc83b3514bab8e39c",
-    "url": "/scale-trainer/static/css/main.4e1426ee.chunk.css"
+    "revision": "fddda01bf39c936530ff",
+    "url": "/scale-trainer/static/css/main.c845bcff.chunk.css"
   },
   {
-    "revision": "4fd234a3f02dbce3faf4d0ded897191a",
+    "revision": "ca53e136c3f508a59bf07977246e9c79",
     "url": "/scale-trainer/index.html"
   }
 ];
