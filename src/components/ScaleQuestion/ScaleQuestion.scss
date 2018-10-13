@@ -191,7 +191,7 @@
         margin: 0;
         color: white;
         font-weight: bold;
-        transition: all 0.2s;
+        transition: all 0.4s;
         max-width: 150px;
 
         @include breakpoint(phablet) {
@@ -210,11 +210,6 @@
 
         &:hover {
             background-color: $button-background-color-hover;
-
-            &:not(:disabled) {
-                padding: 0.8em 1em;
-                margin: 1.1em 1em;
-            }
         }
 
         &:active {
