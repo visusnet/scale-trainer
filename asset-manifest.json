@@ -1,14 +1,14 @@
 {
-  "main.css": "/scale-trainer/static/css/main.fe930cd5.chunk.css",
-  "main.js": "/scale-trainer/static/js/main.51f55f1f.chunk.js",
-  "main.js.map": "/scale-trainer/static/js/main.51f55f1f.chunk.js.map",
+  "main.css": "/scale-trainer/static/css/main.0802cc4a.chunk.css",
+  "main.js": "/scale-trainer/static/js/main.30b29e15.chunk.js",
+  "main.js.map": "/scale-trainer/static/js/main.30b29e15.chunk.js.map",
   "static/js/1.b174f5d1.chunk.js": "/scale-trainer/static/js/1.b174f5d1.chunk.js",
   "static/js/1.b174f5d1.chunk.js.map": "/scale-trainer/static/js/1.b174f5d1.chunk.js.map",
   "runtime~main.js": "/scale-trainer/static/js/runtime~main.0f476909.js",
   "runtime~main.js.map": "/scale-trainer/static/js/runtime~main.0f476909.js.map",
-  "static/css/main.fe930cd5.chunk.css.map": "/scale-trainer/static/css/main.fe930cd5.chunk.css.map",
+  "static/css/main.0802cc4a.chunk.css.map": "/scale-trainer/static/css/main.0802cc4a.chunk.css.map",
   "static/media/ScaleTrainer.scss": "/scale-trainer/static/media/close.4ceeeab0.svg",
   "index.html": "/scale-trainer/index.html",
-  "precache-manifest.5222f5fdc09d4b149c71adb7064dfeb8.js": "/scale-trainer/precache-manifest.5222f5fdc09d4b149c71adb7064dfeb8.js",
+  "precache-manifest.de386905538e80cc4a4c9243c6669d2b.js": "/scale-trainer/precache-manifest.de386905538e80cc4a4c9243c6669d2b.js",
   "service-worker.js": "/scale-trainer/service-worker.js"
 }
