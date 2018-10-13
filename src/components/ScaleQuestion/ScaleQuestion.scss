@@ -84,7 +84,7 @@
         }
 
         &__actions {
-            @include grid(4, 1, 0);
+            @include grid(3, 1, 0);
             position: fixed;
             bottom: 1em;
             left: 0;
@@ -92,7 +92,7 @@
         }
 
         &__playButton {
-            display: inline-block;
+            display: none;
         }
 
         &__solution {
