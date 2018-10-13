@@ -54,6 +54,7 @@
                 text-align: center;
                 border: 1px solid grayscale($color-light-blue);
                 outline: 0;
+                height: calc(100% - 2px);
 
                 &:focus {
                     border-color: $button-background-color-hover;
