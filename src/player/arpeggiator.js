@@ -1,5 +1,6 @@
 // @flow
 import {Note} from '../music/note';
+import startAudioContext from 'startaudiocontext';
 import Tone from 'tone';
 
 const synthesizer = new Tone.AMSynth().toMaster();
@@ -10,6 +11,10 @@ export type StopCallback = () => void;
 export default class Arpeggiator {
     static _patterns: Tone.Pattern[] = [];
 
+    static registerTrigger(triggerSelector: string) {
+        startAudioContext(Tone.context, triggerSelector);
+    }
+
     static play(notes: Note[], onPlayNote: ?NoteCallback, onStop: ?StopCallback) {
         Arpeggiator._removeAllPatterns();
 
@@ -19,15 +24,20 @@ export default class Arpeggiator {
         const numberOfArpeggioNotes = pitchOctaves.length * 2 - 1;
         let playedNotes = 0;
 
+        console.log({pitchOctaves});
+
         const pattern = new Tone.Pattern(function (time, note) {
+            console.log('here');
             const noteIndex = pitchOctaves.indexOf(note);
             if (onPlayNote) {
                 onPlayNote(noteIndex);
             }
+            console.log('Playing note ' + note);
             synthesizer.triggerAttackRelease(note, 0.5);
             playedNotes++;
             if (onStop && playedNotes === numberOfArpeggioNotes) {
                 setTimeout(() => {
+                    console.log('Stopping.');
                     onStop();
                     Arpeggiator._removeAllPatterns();
                 }, 500);

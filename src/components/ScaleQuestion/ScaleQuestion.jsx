@@ -19,6 +19,7 @@ import Fretboard from 'react-fretboard';
 import Arpeggiator from '../../player/arpeggiator';
 
 type Props = {
+    isEnabled: boolean,
     question: ScaleQuestion,
     onNextClick: () => void
 }
@@ -60,6 +61,10 @@ export default class ScaleQuestionComponent extends Component<Props, State> {
                 && note.accidental && ACCIDENTALS.includes(note.accidental);
         });
         return numberOfNotes === requiredNumberOfAnswers && areAllNotesComplete;
+    }
+
+    componentDidMount() {
+        Arpeggiator.registerTrigger('.scaleQuestion__playButton');
     }
 
     _handleAnswer = (e: any) => {
@@ -120,7 +125,7 @@ export default class ScaleQuestionComponent extends Component<Props, State> {
                     const note = this._getNote(key, noteIndex);
                     const isRoot = _isRoot(key, noteIndex);
                     const showError = !isRoot && this.state.showErrors && !this.state.correctNotes[noteIndex];
-                    const isSelected = this.state.selectedNoteIndex === noteIndex;
+                    const isSelected = this.state.selectedNoteIndex === noteIndex && this.props.isEnabled;
                     return (
                         <NoteInput
                             key={`note-${noteIndex}`}

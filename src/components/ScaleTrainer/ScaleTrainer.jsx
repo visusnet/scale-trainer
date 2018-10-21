@@ -160,7 +160,10 @@ export default class ScaleTrainer extends Component<void, State> {
                 {this.renderMenuBar()}
                 {this.renderMenu()}
                 {question && question.type === 'scale'
-                    ? <ScaleQuestion key={_questionToString(question)} question={question}
+                    ? <ScaleQuestion
+                        key={_questionToString(question)}
+                        isEnabled={!this.state.isMenuOpen}
+                        question={question}
                         onNextClick={this._handleNextClick}/>
                     : <div>Loading...</div>}
             </div>

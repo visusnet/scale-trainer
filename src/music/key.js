@@ -42,7 +42,7 @@ export class Key {
     }
 
     toNotes(): Note[] {
-        return [...this.modeConstruction.slice(0, -1).reduce((notes: Note[], interval: Interval) => {
+        return [..._removeRoot(this.modeConstruction).reduce((notes: Note[], interval: Interval) => {
             const previousNote = notes[notes.length - 1];
             const currentNote = addInterval(previousNote, interval);
             return [...notes, currentNote.normalizeAccidentals(this.root.accidental)];
@@ -65,4 +65,8 @@ export class Key {
 function _rotateArray<T>(array: T[], rotateByOffset: number) {
     const length = array.length;
     return array.map((element: T, index: number) => array[(((rotateByOffset + index) % length) + length) % length]);
+}
+
+function _removeRoot(construction: ScaleConstruction): ScaleConstruction {
+    return construction.slice(0, -1);
 }
