@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.2/workbox-sw.js");
 
 importScripts(
-  "/scale-trainer/precache-manifest.c1176119bfea81335016afa629c67fdb.js"
+  "/scale-trainer/precache-manifest.ae07ebfcc2427fcd110ddce843db6111.js"
 );
 
 workbox.clientsClaim();
