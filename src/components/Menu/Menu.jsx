@@ -90,7 +90,7 @@ export default class Menu extends Component<Props> {
                                 name="includeModes"
                                 value="includeModes"
                                 checked={this.props.options.includeModes}
-                                onChange={this.props.onOptionChange}/>
+                                onChange={this._handleOptionChange}/>
                             Modes
                         </label>
                     </div>
