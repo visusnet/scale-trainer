@@ -1,0 +1,13 @@
+@import "../../assets/mixins";
+@import "../../assets/variables";
+
+.menuBar {
+    @include breakpoint(mobile) {
+        @include fill-row;
+        border-bottom: $border;
+    }
+
+    &__openMenuButton {
+        @include icon-button('./images/burger.svg');
+    }
+}

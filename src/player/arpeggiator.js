@@ -2,6 +2,7 @@
 import {Note} from '../music/note';
 import startAudioContext from 'startaudiocontext';
 import Tone from 'tone';
+import isAppleIOS from 'is-ios';
 
 const synthesizer = new Tone.AMSynth().toMaster();
 
@@ -12,7 +13,9 @@ export default class Arpeggiator {
     static _patterns: Tone.Pattern[] = [];
 
     static registerTrigger(triggerSelector: string) {
-        startAudioContext(Tone.context, triggerSelector);
+        if (isAppleIOS) {
+            startAudioContext(Tone.context, triggerSelector);
+        }
     }
 
     static play(notes: Note[], onPlayNote: ?NoteCallback, onStop: ?StopCallback) {
