@@ -1,0 +1,19 @@
+@import "variables";
+@import "mixins";
+@import "button";
+
+/* iOS and other mobile platforms set some unwanted padding. */
+@include breakpoint(mobile) {
+    input {
+        padding: 0;
+    }
+}
+
+body {
+    font: $font;
+    min-width: 250px;
+    margin: 0;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}

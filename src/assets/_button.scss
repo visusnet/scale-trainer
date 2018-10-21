@@ -1,0 +1,41 @@
+@import "variables";
+@import "mixins";
+
+button {
+    font: $font;
+    background-color: $button-background-color;
+    border: 0;
+    padding: 1em 0;
+    margin: 0;
+    color: white;
+    font-weight: bold;
+    transition: all 0.4s;
+    max-width: 150px;
+
+    @include breakpoint(phablet) {
+        margin-left: auto;
+        margin-right: auto;
+        width: 100%;
+    }
+
+    @include breakpoint(desktop) {
+        margin: 1em;
+    }
+
+    &:hover, &:active, &:focus {
+        outline: 0;
+    }
+
+    &:hover {
+        background-color: $button-background-color-hover;
+    }
+
+    &:active {
+        transition-duration: 0s;
+        background-color: $button-background-color-active;
+    }
+
+    &:disabled {
+        background-color: $button-background-color-disabled;
+    }
+}

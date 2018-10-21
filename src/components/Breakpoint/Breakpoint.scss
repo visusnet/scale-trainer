@@ -1,26 +1,15 @@
-@import "assets/variables";
-@import "assets/mixins";
-
-body {
-    font: $font;
-    min-width: 250px;
-}
-
-@include breakpoint(mobile) {
-    input {
-        padding: 0;
-    }
-}
+@import "../../assets/mixins";
 
 .breakpoint {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+
     &--desktop {
-        display: none;
-        position: fixed;
-        bottom: 0;
-        width: 100%;
         background-color: green;
         color: white;
-        text-align: center;
 
         @include debug() {
             @include breakpoint(desktop) {
@@ -30,12 +19,7 @@ body {
     }
 
     &--tablet {
-        display: none;
-        position: fixed;
-        bottom: 0;
-        width: 100%;
         background-color: yellow;
-        text-align: center;
 
         @include debug() {
             @include breakpoint(tablet) {
@@ -45,13 +29,8 @@ body {
     }
 
     &--mobile {
-        display: none;
-        position: fixed;
-        bottom: 0;
-        width: 100%;
         background-color: red;
         color: white;
-        text-align: center;
 
         @include debug() {
             @include breakpoint(mobile) {
