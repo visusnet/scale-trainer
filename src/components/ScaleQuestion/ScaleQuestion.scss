@@ -15,7 +15,7 @@
         }
 
         &__question, &__answer {
-            grid-column: 2 / span 10;
+            grid-column: 2 / span 11;
             p {
                 margin-bottom: 0.5em;
                 margin-top: 0;
@@ -77,6 +77,10 @@
     }
 
     @include breakpoint(desktop) {
+        &__question, &__answer {
+            grid-column: 2 / span 10;
+        }
+
         &__answer {
             margin-bottom: 0;
         }
