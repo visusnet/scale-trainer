@@ -1,0 +1,235 @@
+<style type="text/css">
+    body {
+        font: 12pt -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+        min-width: 250px;
+        margin: 0;
+        padding: 0;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    .wrapper {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        width: 50em;
+        text-align: center;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 5em;
+    }
+
+    .note {
+        display: grid;
+        font-size: 45px;
+        height: 1em;
+        width: 2em;
+        grid-template-areas: "pitch accidental1" "pitch accidental2" "pitch accidental3";
+        grid-template-columns: auto 1em;
+    }
+
+    .note__pitch {
+        grid-area: pitch;
+        padding: 0;
+        font-size: 45px;
+        width: 1em;
+        text-align: center;
+        border: 1px solid #aeaeae;
+        border-right-width: 0;
+        outline: 0;
+    }
+
+    .note__accidental {
+        border: 0;
+    }
+
+    .note__accidental:focus {
+        outline: 0;
+    }
+
+    .note__accidental:nth-of-type(1) {
+        grid-area: accidental1;
+    }
+
+    .note__accidental:nth-of-type(2) {
+        grid-area: accidental2;
+    }
+
+    .note__accidental:nth-of-type(3) {
+        grid-area: accidental3;
+    }
+
+    .note__accidental--active {
+        border-top: 1px solid #aeaeae;
+        border-right: 1px solid #aeaeae;
+        border-bottom: 1px solid #aeaeae;
+        font-weight: bold;
+        font-size: 0.8em;
+        text-align: left;
+    }
+
+    .note__accidental:not(.note__accidental--active) {
+        border-left: 1px solid #aeaeae;
+        background-color: lightgray;
+    }
+
+    select.note__pitch, select.note__accidental {
+        -webkit-appearance: none;
+        -webkit-border-radius: 0;
+        text-align: right;
+        text-align-last: center;
+    }
+
+    select.note__accidental {
+        height: 1.8em;
+        text-align-last: left;
+    }
+
+    #note-5 select.note__pitch {
+        text-align-last: right;
+    }
+</style>
+<div class="wrapper">
+    <div class="note" id="note-1">
+        <input class="note__pitch" type="text" maxlength="2"/>
+        <button class="note__accidental note__accidental--active">&sharp;</button>
+        <button class="note__accidental">&natur;</button>
+        <button class="note__accidental">&flat;</button>
+    </div>
+
+    <div class="note" id="note-2">
+        <input class="note__pitch" type="text" maxlength="2"/>
+        <button class="note__accidental note__accidentalUp" data-current="sharp">&sharp;</button>
+        <button class="note__accidental note__accidental--active" data-current="natural">&natur;</button>
+        <button class="note__accidental note__accidentalDown" data-current="flat">&flat;</button>
+    </div>
+
+    <div class="note" id="note-3">
+        <select class="note__pitch">
+            <option>A</option>
+            <option>B</option>
+            <option>C</option>
+            <option>D</option>
+            <option>E</option>
+            <option>F</option>
+            <option>G</option>
+        </select>
+        <button class="note__accidental note__accidental--active">&sharp;</button>
+        <button class="note__accidental">&natur;</button>
+        <button class="note__accidental">&flat;</button>
+    </div>
+
+    <div class="note" id="note-4">
+        <select class="note__pitch">
+            <option>A</option>
+            <option>B</option>
+            <option>C</option>
+            <option>D</option>
+            <option>E</option>
+            <option>F</option>
+            <option>G</option>
+        </select>
+        <button class="note__accidental note__accidentalUp" data-current="sharp">&sharp;</button>
+        <button class="note__accidental note__accidental--active" data-current="natural">&natur;</button>
+        <button class="note__accidental note__accidentalDown" data-current="flat">&flat;</button>
+    </div>
+
+    <div class="note" id="note-5">
+        <select class="note__pitch">
+            <option>A</option>
+            <option>B</option>
+            <option>C</option>
+            <option>D</option>
+            <option>E</option>
+            <option>F</option>
+            <option>G</option>
+        </select>
+        <select class="note__accidental note__accidental--active">
+            <option>&#119082;</option>
+            <option>&sharp;</option>
+            <option>&natur;</option>
+            <option>&flat;</option>
+            <option>&#119083;</option>
+        </select>
+    </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
+<script type="text/javascript">
+    const PITCHES = 'ABCDEFG';
+
+    function toPitch(pitchCandidate) {
+        const uppedPitchCandidate = pitchCandidate.toUpperCase();
+        if (PITCHES.includes(uppedPitchCandidate)) {
+            return uppedPitchCandidate;
+        }
+        return '';
+    }
+
+    $('#note-1 input, #note-2 input').keydown((event) => {
+        event.preventDefault();
+        $(event.currentTarget).val(toPitch(event.key));
+    });
+
+    $('#note-1 button, #note-3 button').click((event) => {
+        $(event.currentTarget).parent().find('button').removeClass('note__accidental--active');
+        $(event.currentTarget).addClass('note__accidental--active');
+    });
+
+    const UP = {
+        'nothigher': 'nothigher',
+        'doublesharp': 'nothigher',
+        'sharp': 'doublesharp',
+        'natural': 'sharp',
+        'flat': 'natural',
+        'doubleflat': 'flat',
+        'notlower': 'doubleflat'
+    };
+
+    const DOWN = {
+        'nothigher': 'sharp',
+        'doublesharp': 'sharp',
+        'sharp': 'natural',
+        'natural': 'flat',
+        'flat': 'doubleflat',
+        'doubleflat': 'notlower',
+        'notlower': 'notlower'
+    };
+
+    const ACCIDENTALS = {
+        'nothigher': '',
+        'notlower': '',
+        'doublesharp': '&#119082;',
+        'sharp': '&sharp;',
+        'natural': '&natur;',
+        'flat': '&flat;',
+        'doubleflat': '&#119083;'
+    };
+
+    function setAccidentalDown($accidental) {
+        const currentAccidental = $accidental.data('current');
+        const nextAccidental = DOWN[currentAccidental];
+        $accidental.data('current', nextAccidental);
+        $accidental.html(ACCIDENTALS[nextAccidental]);
+        return !!nextAccidental;
+    }
+
+    function setAccidentalUp($accidental) {
+        const currentAccidental = $accidental.data('current');
+        const nextAccidental = UP[currentAccidental];
+        $accidental.data('current', nextAccidental);
+        $accidental.html(ACCIDENTALS[nextAccidental]);
+        return !!nextAccidental;
+    }
+
+    $('.note__accidentalUp').click((event) => {
+        const $parent = $(event.currentTarget).parent();
+        setAccidentalUp($parent.find('.note__accidentalUp'));
+        setAccidentalUp($parent.find('.note__accidental--active'));
+        setAccidentalUp($parent.find('.note__accidentalDown'));
+    });
+    $('.note__accidentalDown').click((event) => {
+        const $parent = $(event.currentTarget).parent();
+        setAccidentalDown($parent.find('.note__accidentalDown'));
+        setAccidentalDown($parent.find('.note__accidental--active'));
+        setAccidentalDown($parent.find('.note__accidentalUp'));
+    });
+</script>
