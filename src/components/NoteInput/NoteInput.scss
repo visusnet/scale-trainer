@@ -1,0 +1,72 @@
+@import "../../assets/variables";
+@import "../../assets/mixins";
+
+.note {
+    @include grid-with-areas("pitch accidentals");
+    width: calc(#{$pitch-column-width} + #{$accidental-column-width});
+    font-size: $note-font-size;
+
+    &--error {
+        outline: 2px solid red;
+        outline-offset: 10px;
+    }
+
+    &--highlighted {
+        z-index: 2;
+
+        &:before {
+            position: absolute;
+            display: block;
+            content: '';
+            width: 2em;
+            height: 1.6em;
+            margin: -0.2em;
+            background-color: rgba($color-light-blue, 0.3);
+            border: 2px solid $color-light-blue;
+            border-radius: 20px;
+        }
+    }
+
+    &__pitch {
+        grid-area: pitch;
+        width: $pitch-column-width;
+        border: $border;
+
+        input {
+            font-size: $note-font-size;
+            width: $pitch-column-width;
+            border: 0;
+            text-align: center;
+
+            &:focus {
+                outline: 1px solid $color-blue;
+                outline-offset: 0;
+            }
+        }
+    }
+
+    &__accidentals {
+        @include vertical-grid;
+        grid-area: accidentals;
+        width: $accidental-column-width;
+        align-content: space-between;
+        justify-items: left;
+    }
+
+    &__accidental {
+        border: $border;
+        background-color: $color-gray;
+        color: white;
+        width: 80%;
+        height: 20px;
+        border-top-right-radius: 20px;
+        border-bottom-right-radius: 20px;
+        text-align: center;
+        font-size: 10pt;
+        line-height: 16pt;
+        font-weight: bold;
+        cursor: pointer;
+
+        @include button-effects;
+    }
+}

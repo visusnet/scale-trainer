@@ -9,6 +9,11 @@
     }
 }
 
+@mixin grid-with-areas($areas) {
+    display: grid;
+    grid-template-areas: $areas;
+}
+
 @mixin auto-fill-grid($numberOfRows: null, $max-width: 1.8em, $gap: 1em) {
     display: grid;
     grid-template-columns: repeat(auto-fill, $max-width);
@@ -18,12 +23,25 @@
     }
 }
 
+@mixin vertical-grid() {
+    display: grid;
+    grid-template-columns: 1fr;
+}
+
 @mixin fill-row($numberOfColumns: 12) {
     grid-column: col-start / span $numberOfColumns;
 }
 
+@mixin column-padding($padding, $numberOfColumns: 12) {
+    grid-column: #{$padding + 1} / span #{$numberOfColumns - $padding - 1};
+}
+
 @mixin column-span($columnSpan) {
     grid-column: span $columnSpan;
+}
+
+@mixin center-column() {
+    justify-items: center;
 }
 
 @mixin breakpoint($screenType) {
@@ -55,6 +73,55 @@
 @mixin headline($font-size) {
     margin: 0;
     font-size: $font-size;
+}
+
+@mixin button-effects() {
+    transition: all 0.3s;
+
+    &:hover, &:active, &:focus {
+        outline: 0;
+    }
+
+    &:hover {
+        background-color: $button-background-color-hover;
+        border-color: $button-background-color-hover;
+        cursor: pointer;
+    }
+
+    &:active {
+        transition-duration: 0s;
+        background-color: $button-background-color-active;
+        border-color: $button-background-color-active;
+    }
+
+    &:disabled, &--disabled {
+        background-color: $button-background-color-disabled;
+        border-color: $button-background-color-disabled;
+        color: lighten($button-background-color-disabled, 20%);
+        cursor: default;
+
+        &:hover {
+            background-color: $button-background-color-disabled;
+            border-color: $button-background-color-disabled;
+            cursor: default;
+        }
+
+        &#{&}--selected, &#{&}--selected:hover {
+            background-color: $toggle-button-background-color-selected-disabled;
+            border-color: $toggle-button-background-color-selected-disabled;
+            cursor: default;
+        }
+    }
+
+    &--selected {
+        background-color: $toggle-button-background-color-selected;
+        border-color: $toggle-button-background-color-selected;
+    }
+
+    &--disabled#{&}--selected {
+        border-color: $toggle-button-background-color-selected-disabled;
+        background-color: $toggle-button-background-color-selected-disabled;
+    }
 }
 
 @mixin debug() {

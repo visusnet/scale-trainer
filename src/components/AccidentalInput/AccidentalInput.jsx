@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 import type {Accidental} from '../../music/note';
+import classNames from 'classnames';
 
 type AccidentalChangeHandler = (noteIndex: number, accidental: Accidental) => void;
 
@@ -8,29 +9,24 @@ type Props = {
     accidental: Accidental,
     accidentalIndex: number,
     isCurrentAccidental: boolean,
-    isRoot: boolean,
+    isDisabled: boolean,
     noteIndex: number,
     onChange: AccidentalChangeHandler
 };
 
-export default function AccidentalInput(props: Props) {
-    const {accidental, accidentalIndex, isCurrentAccidental, isRoot, noteIndex, onChange} = props;
-    const accidentalKey = `note-${noteIndex}-accidental-${accidentalIndex}`;
+const noop = () => {};
+
+export default function AccidentalInput({accidental, accidentalIndex, isCurrentAccidental, isDisabled, noteIndex, onChange}: Props) {
+    const className = classNames({
+        'note__accidental': true,
+        'note__accidental--selected': isCurrentAccidental,
+        'note__accidental--disabled': isDisabled
+    });
     return (
-        <div className="scaleQuestion__accidental">
-            <label
-                htmlFor={accidentalKey}>
-                <input
-                    type="radio"
-                    id={accidentalKey}
-                    name={accidentalKey}
-                    value={accidental}
-                    checked={isCurrentAccidental}
-                    onChange={_createHandleAccidentalChange(noteIndex, accidental, onChange)}
-                    disabled={isRoot}
-                />
-                <span className="scaleQuestion__accidentalValue">{accidental}</span>
-            </label>
+        <div
+            className={className}
+            onClick={isDisabled ? noop : _createHandleAccidentalChange(noteIndex, accidental, onChange)}>
+            {accidental}
         </div>
     );
 }

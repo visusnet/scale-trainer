@@ -14,12 +14,13 @@ import {
 } from '../../music/note';
 import AccidentalInput from '../AccidentalInput/AccidentalInput';
 import classNames from 'classnames';
+import './NoteInput.scss';
 
 type NoteInputChangeHandler = (noteIndex: number, note: Note) => void;
 type SwitchNoteHandler = (nextNoteIndex: number) => void;
 
 type Props = {
-    isRoot: boolean,
+    isDisabled: boolean,
     isHighlighted: boolean,
     isSelected: boolean,
     note: Note,
@@ -35,20 +36,20 @@ const KEY_CODE_ARROW_RIGHT = 39;
 const KEY_CODE_ARROW_DOWN = 40;
 
 export default function NoteInput(props: Props) {
-    const {isRoot, isSelected, noteIndex, onChange, onSwitchNote, note} = props;
+    const {isDisabled, isSelected, noteIndex, onChange, onSwitchNote, note} = props;
     const className = classNames({
-        'scaleQuestion__note': true,
-        'scaleQuestion__note--error': props.showError,
-        'scaleQuestion__note--highlighted': props.isHighlighted
+        'note': true,
+        'note--error': props.showError,
+        'note--highlighted': props.isHighlighted
     });
     return (
         <div className={className} key={`note-${noteIndex}${isSelected ? '-selected' : ''}`}>
-            <div className="scaleQuestion__pitch">
+            <div className="note__pitch">
                 <input
                     type="text"
                     name={`note-${noteIndex}-pitch`}
                     value={note.pitch || ''}
-                    disabled={isRoot}
+                    disabled={isDisabled}
                     tabIndex={noteIndex}
                     autoFocus={isSelected}
                     onFocus={(e) => _placeCaretAtEnd(e.target)}
@@ -57,17 +58,17 @@ export default function NoteInput(props: Props) {
                     maxLength={2}
                 />
             </div>
-            <div className="scaleQuestion__accidentals">
-                {ACCIDENTALS.map((accidental: Accidental, accidentalIndex: number) => (
+            <div className="note__accidentals">
+                {[...ACCIDENTALS].map((accidental, accidentalIndex) =>
                     <AccidentalInput
-                        key={`note-${noteIndex}-accidental-${accidentalIndex}`}
+                        key={`accidental${accidentalIndex}`}
                         accidental={accidental}
                         accidentalIndex={accidentalIndex}
-                        isCurrentAccidental={note.accidental === accidental}
-                        isRoot={isRoot}
+                        isCurrentAccidental={accidental === note.accidental}
+                        isDisabled={isDisabled}
                         noteIndex={noteIndex}
                         onChange={_createHandleAccidentalChange(noteIndex, note.pitch, accidental, onChange)}/>
-                ))}
+                )}
             </div>
         </div>
     );

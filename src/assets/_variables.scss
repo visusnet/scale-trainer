@@ -1,21 +1,43 @@
+@import "functions";
+
 $font-size: 12pt;
 $font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
 $font: $font-size $font-family;
 
-$color-light-blue: #61dafb;
+$color-light-blue: #4c83df;
 
-$button-background-color: darken($color-light-blue, 10);
+$color-blue: darken($color-light-blue, 10);
+$color-dark-blue: darken($color-light-blue, 20);
+$color-gray: grayscale($color-light-blue);
+$color-light-gray: lighten($color-gray, 10);
+$color-dark-gray: darken($color-gray, 20);
+$color-red: lighten(adjust_hue($color-dark-blue, 140), 20);
+$color-green: lighten(adjust_hue($color-light-blue, 270), 10);
+$color-yellow: lighten(adjust_hue($color-dark-blue, 180), 20);
+
+$button-background-color: $color-blue;
 $button-background-color-hover: $color-light-blue;
-$button-background-color-active: darken($color-light-blue, 20);
-$button-background-color-disabled: grayscale($color-light-blue);
+$button-background-color-active: $color-dark-blue;
 
-$hint-background-color: lighten(adjust_hue($color-light-blue, 10deg), 20);
+$button-background-color-disabled: $color-light-gray;
 
-$solution-background-color-correct: adjust_hue(complement($color-light-blue), 130deg);
-$solution-color-correct: black;
-$solution-background-color-wrong: complement($color-light-blue);
-$solution-color-wrong: white;
+$toggle-button-background-color: $color-gray;
+$toggle-button-background-color-selected: $color-blue;
+$toggle-button-background-color-selected-disabled: $color-dark-gray;
 
-$border: 1px solid grayscale($color-light-blue);
+$hint-background-color: $color-yellow;
+$hint-color: text-color-by-background-color($hint-background-color);
+
+$solution-background-color-correct: $color-green;
+$solution-color-correct: text-color-by-background-color($solution-background-color-correct);
+
+$solution-background-color-wrong: $color-red;
+$solution-color-wrong: text-color-by-background-color($solution-background-color-wrong);
+
+$border: 1px solid $color-gray;
+
+$note-font-size: 45pt;
+$pitch-column-width: 1em;
+$accidental-column-width: 0.7em;
 
 $debug: false;

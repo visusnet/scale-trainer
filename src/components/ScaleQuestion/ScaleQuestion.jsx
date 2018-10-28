@@ -14,9 +14,9 @@ import {
     AUGMENTED_DIMINISHED_INTERVALS,
     relativeIntervalsToRootIntervals
 } from '../../music/interval';
-import NoteInput from '../NoteInput/NoteInput';
 import Fretboard from 'react-fretboard';
 import Arpeggiator from '../../player/arpeggiator';
+import NoteInput from '../NoteInput/NoteInput';
 
 type Props = {
     isEnabled: boolean,
@@ -129,7 +129,7 @@ export default class ScaleQuestionComponent extends Component<Props, State> {
                     return (
                         <NoteInput
                             key={`note-${noteIndex}`}
-                            isRoot={isRoot}
+                            isDisabled={isRoot}
                             isSelected={isSelected}
                             isHighlighted={noteIndex === this.state.highlightedNoteIndex}
                             noteIndex={noteIndex}

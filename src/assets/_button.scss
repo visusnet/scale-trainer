@@ -9,7 +9,6 @@ button {
     margin: 0;
     color: white;
     font-weight: bold;
-    transition: all 0.4s;
     max-width: 150px;
 
     @include breakpoint(phablet) {
@@ -22,20 +21,5 @@ button {
         margin: 1em;
     }
 
-    &:hover, &:active, &:focus {
-        outline: 0;
-    }
-
-    &:hover {
-        background-color: $button-background-color-hover;
-    }
-
-    &:active {
-        transition-duration: 0s;
-        background-color: $button-background-color-active;
-    }
-
-    &:disabled {
-        background-color: $button-background-color-disabled;
-    }
+    @include button-effects;
 }

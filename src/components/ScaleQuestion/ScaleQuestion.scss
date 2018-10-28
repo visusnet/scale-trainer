@@ -15,73 +15,22 @@
         }
 
         &__question, &__answer {
-            @include fill-row;
-            margin: 0 1em;
-
+            grid-column: 2 / span 10;
             p {
                 margin-bottom: 0.5em;
                 margin-top: 0;
             }
         }
 
+        &__answer {
+            margin-bottom: 5em;
+        }
+
         &__notes {
-            @include auto-fill-grid(2);
-            max-width: 1000px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        &__note {
-            @include column-span(2);
-            @include grid(2);
-
-            &--error {
-                outline: 1px solid red;
-            }
-
-            &--highlighted {
-                outline: 3px solid $color-light-blue;
-            }
-        }
-
-        &__pitch {
-            @include fill-row(2);
-            text-align: center;
-
-            input {
-                font-size: 45px;
-                width: 1em;
-                text-align: center;
-                border: 1px solid grayscale($color-light-blue);
-                outline: 0;
-                height: calc(100% - 2px);
-
-                &:focus {
-                    border-color: $button-background-color-hover;
-                }
-            }
-        }
-
-        &__accidentals {
-            @include fill-row(2);
-        }
-
-        &__accidental {
-            text-align: center;
-
-            label {
-                display: inline-flex;
-                align-items: center;
-            }
-        }
-
-        input:checked + &__accidentalValue {
-            font-weight: bold;
-        }
-
-        input:not(:checked) + &__accidentalValue {
-            font-weight: lighter;
-            color: grayscale($color-light-blue);
+            @include auto-fill-grid(null, #{$pitch-column-width + $accidental-column-width}, 0em);
+            @include center-column;
+            grid-row-gap: 0.5em;
+            font-size: 45pt;
         }
 
         &__actions {
@@ -107,66 +56,48 @@
                 margin-bottom: 0;
             }
         }
-    }
 
-    @include breakpoint(tablet) {
-        &__notes {
-            @include auto-fill-grid(2, 2.3em);
-        }
-        &__note {
-            @include grid(2);
+
+        &__hint {
+            background-color: $hint-background-color;
+            color: $hint-color;
         }
 
-        &__pitch {
-            @include column-span(1);
-            text-align: right;
-        }
+        &__solution {
+            &--correct {
+                background-color: $solution-background-color-correct;
+                color: $solution-color-correct;
+            }
 
-        &__accidentals {
-            @include column-span(1);
-        }
-
-        &__accidental {
-            text-align: left;
+            &--wrong {
+                background-color: $solution-background-color-wrong;
+                color: $solution-color-wrong;
+            }
         }
     }
 
     @include breakpoint(desktop) {
+        &__answer {
+            margin-bottom: 0;
+        }
+
+        &__notes {
+            @include auto-fill-grid(null, #{$pitch-column-width + $accidental-column-width}, 1em);
+        }
+
         &__actions {
             display: block;
             position: relative;
             text-align: center;
-            margin: 1em;
+            margin: 1em 0;
         }
 
-        &__question {
-            grid-column: 2 / span 10;
+        &__question, &__hint, &__solution {
+            @include column-padding(1);
         }
 
         &__playButton {
             display: inline-block;
-        }
-    }
-
-    &__note {
-        &--error {
-            outline: 1px solid red;
-        }
-    }
-
-    &__hint {
-        background-color: $hint-background-color;
-    }
-
-    &__solution {
-        &--correct {
-            background-color: $solution-background-color-correct;
-            color: $solution-color-correct;
-        }
-
-        &--wrong {
-            background-color: $solution-background-color-wrong;
-            color: $solution-color-wrong;
         }
     }
 
